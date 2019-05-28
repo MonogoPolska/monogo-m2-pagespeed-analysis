@@ -1,6 +1,6 @@
 #### Magento 2 module for Google PageSpeed Analysis.
 
-This module will work only with Magento 2.3.0 and higher.commi
+This module will work only with Magento 2.3.0 and higher
 
 # **Install**
 

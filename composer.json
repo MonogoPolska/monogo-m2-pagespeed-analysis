@@ -1,6 +1,6 @@
 {
     "name": "monogo/pagespeed-analysis",
-    "description": "Magento 2 Pagespeed Analysis",
+    "description": "Magento 2 module for Google PageSpeed Analysis",
     "require": {
         "php": "~7.1.0|~7.2.0",
 
