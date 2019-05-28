@@ -1,0 +1,117 @@
+<?php
+/**
+ * Graph template
+ *
+ * @category PagespeedAnalysis
+ * @package  Monogo|PagespeedAnalysis
+ * @author   Paweł Detka <pawel.detka@monogo.pl>
+ */
+?>
+<?php
+/**
+ * @var $block \Monogo\PagespeedAnalysis\Block\Adminhtml\Pagespeed\Graph\ChartScript
+ */
+?>
+
+<?php
+$graphData = $this->getData('graph');
+?>
+<script>
+    require(['https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js'], function (Chart) {
+
+        <?php foreach ($graphData as $key => $item): ?>
+        <?php if(!empty($item)): ?>
+        <?php foreach ($item as $strategy => $data): ?>
+        var chartMain<?= str_replace('=', '', $key)?><?=  $strategy ?>
+            = new Chart(document.getElementById('main-<?=$strategy?>-<?=  str_replace('=', '', $key) ?>'), {
+            "type": "line",
+            "data": {
+                "labels": <?= json_encode($data['created_at']) ?>,
+                "datasets": [
+                    {
+                        "label": "Performance",
+                        "data": <?= json_encode($data['performance']) ?>,
+                        "fill": false,
+                        "borderColor": "<?= $block->getPerformanceColor() ?>",
+                        "lineTension": 0.1
+                    },
+                    {
+                        "label": "SEO",
+                        "data": <?= json_encode($data['seo']) ?>,
+                        "fill": false,
+                        "borderColor": "<?= $block->getSeoColor() ?>",
+                        "lineTension": 0.1
+                    },
+                    {
+                        "label": "PWA",
+                        "data": <?= json_encode($data['pwa']) ?>,
+                        "fill": false,
+                        "borderColor": "<?= $block->getPwaColor() ?>",
+                        "lineTension": 0.1
+                    },
+
+                    {
+                        "label": "Best Practices",
+                        "data": <?= json_encode($data['best_practices']) ?>,
+                        "fill": false,
+                        "borderColor": "<?= $block->getBestPracticesColor() ?>",
+                        "lineTension": 0.1
+                    },
+                    {
+                        "label": "Accessibility",
+                        "data": <?= json_encode($data['accessibility']) ?>,
+                        "fill": false,
+                        "borderColor": "<?= $block->getAccessibilityColor() ?>",
+                        "lineTension": 0.1
+                    },
+                ]
+            },
+            "options": {
+                tooltips: {
+                    intersect: true,
+                    mode: 'index'
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            callback: function (value, index, values) {
+                                return value + '%';
+                            }
+                        }
+                    }],
+
+                }
+            }
+        });
+        var chartTtfb<?= str_replace('=', '', $key)?><?=  $strategy ?>
+            = new Chart(document.getElementById('ttfb-<?=$strategy?>-<?=  str_replace('=', '', $key) ?>'), {
+            "type": "line",
+            "data": {
+                "labels": <?= json_encode($data['created_at']) ?>,
+                "datasets": [{
+                    "label": "TTFB",
+                    "data": <?= json_encode($data['ttfb']) ?>,
+                    "fill": false,
+                    "borderColor": "<?= $block->getTtfbColor() ?>",
+                    "lineTension": 0.1
+                }]
+            },
+            "options": {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            callback: function (value, index, values) {
+                                return value + 'ms';
+                            }
+                        }
+                    }]
+                }
+            }
+        });
+
+        <?php endforeach; ?>
+        <?php endif; ?>
+        <?php endforeach; ?>
+    });
+
+</script>

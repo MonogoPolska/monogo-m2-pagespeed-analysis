@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Monogo_Pagespeed::pagespeed_report" resource="Monogo_Pagespeed::pagespeed_report" module="Monogo_PagespeedAnalysis" title="Pagespeed" sortOrder="10" action="pagespeed_analysis/pagespeed/index" parent="Magento_Reports::report_statistics"/>
+    </menu>
+</config>

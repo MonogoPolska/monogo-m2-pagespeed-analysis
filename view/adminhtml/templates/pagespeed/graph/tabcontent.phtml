@@ -1,0 +1,129 @@
+<?php
+/**
+ * Graph template
+ *
+ * @category PagespeedAnalysis
+ * @package  Monogo|PagespeedAnalysis
+ * @author   Paweł Detka <pawel.detka@monogo.pl>
+ */
+?>
+<?php
+/**
+ * @var $block \Monogo\PagespeedAnalysis\Block\Adminhtml\Pagespeed\Graph\TabContent
+ */
+?>
+
+<?php
+$graphData = $this->getData('graph');
+?>
+
+<?php foreach ($graphData as $key => $item): ?>
+    <?php if (!empty($item)): ?>
+        <div id="<?= md5($key) ?>" class="tabcontent">
+            <?php $defaultTab = md5($key) ?>
+            <?php foreach ($item as $strategy => $data): ?>
+                <?php $lastRecord = $block->getLastRecord(base64_decode($key), $strategy); ?>
+                <h3><?= strtoupper($strategy) ?> (<?= __('Last') . ' ' . $block->getChartHistory() . ' ' . __('days') ?>)</h3>
+                <button id="show_details-<?= $strategy ?>-<?= str_replace('=', '', $key) ?>"
+                        title="<?= __('Show details') ?>" type="button"
+                        class="action-secondary scalable save ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only <?= md5($key . $strategy) ?>">
+                    <span class="ui-button-text">
+                        <span><?= __('Show details') ?></span>
+                    </span>
+                </button>
+                <div id="messages-<?= md5($key . $strategy) ?>" style="display: none">
+                    <div class="message">
+
+                        <?php if (!empty($lastRecord->getComment())): ?>
+                            <?= __('Comment') ?>: <b><?= $lastRecord->getComment() ?></b><br/>
+                        <?php endif ?>
+
+                        <b><?= __('Performance') ?></b>:
+                        <span style="font-weight:bold ;color:  <?= $block->getScoreColor($lastRecord->getPerformanceScore()) ?> ">
+                            <?= $lastRecord->getPerformanceScore() * 100 ?>%
+                        </span>
+                        <br/>
+                        <b><?= __('SEO') ?></b>: <span
+                                style="font-weight:bold ;color:  <?= $block->getScoreColor($lastRecord->getSeoScore()) ?> ">
+                            <?= $lastRecord->getSeoScore() * 100 ?>%
+                        </span>
+                        <br/>
+                        <b><?= __('PWA') ?></b>:
+                        <span style="font-weight:bold ;color:  <?= $block->getScoreColor($lastRecord->getPwaScore()) ?> ">
+                            <?= $lastRecord->getPwaScore() * 100 ?>%
+                        </span>
+                        <br/>
+                        <b><?= __('Best Practices') ?></b>:
+                        <span style="font-weight:bold ;color:  <?= $block->getScoreColor($lastRecord->getBestPracticesScore()) ?> ">
+                            <?= $lastRecord->getBestPracticesScore() * 100 ?>%
+                        </span>
+                        <br/>
+                        <b> <?= __('Accessibility') ?></b>:
+                        <span style="font-weight:bold ;color:  <?= $block->getScoreColor($lastRecord->getAccessibilityScore()) ?> ">
+                            <?= $lastRecord->getAccessibilityScore() * 100 ?>%
+                        </span>
+                        <br/>
+                        <b><?= __('TTFB') ?></b>: <?= $lastRecord->getTtfb() ?>ms<br/>
+                        <br/>
+
+
+                        <?php $renderBlockingResources = json_decode($lastRecord->getRenderBlockingResources(), true) ?>
+                        <?php if (!empty($renderBlockingResources)): ?>
+                            <b><?= __('Render Blocking Resources') ?> (<?= count($renderBlockingResources) ?>):</b><br/>
+                            <?php foreach ($renderBlockingResources as $resource): ?>
+                                <?= __('URL') ?> : <?= $resource['url'] ?><br/>
+                                <?= __('Time') ?> : <?= $resource['wastedMs'] ?>ms<br/>
+                                <?= __('Size') ?> : <?= round($resource['totalBytes'] / 1024, 2) ?>kb<br/>
+                                <hr/>
+                            <?php endforeach; ?>
+                            <br/>
+                        <?php endif ?>
+                        <?php $networkRequests = json_decode($lastRecord->getNetworkRequests(), true) ?>
+                        <?php if (!empty($networkRequests)): ?>
+
+                            <b><?= __('Network Requests') ?> (<?= count($networkRequests) ?>):</b><br/>
+                            <?php foreach ($networkRequests as $requests): ?>
+                                <?= __('URL') ?> : <?= $requests['url'] ?><br/>
+                                <?= __('Time') ?> : <?= floor($requests['time']) ?>ms<br/>
+                                <?= __('Size') ?> : <?= round($requests['resourceSize'] / 1024, 2) ?>kb<br/>
+                                <hr/>
+
+
+                            <?php endforeach; ?>
+                        <?php endif ?>
+
+                    </div>
+                </div>
+                <script type="text/javascript">// <![CDATA[
+                    require([
+                            'jquery',
+                            'Magento_Ui/js/modal/alert'
+                        ],
+                        function ($, alert) {
+                            $('body').on('click', 'button.<?= md5($key . $strategy) ?>', function (event) {
+                                alert({
+                                    innerScroll: true,
+                                    title: '<?= $lastRecord->getUrl() ?><br/>Strategy: <?= $lastRecord->getMode() ?><br/>Date: <?= $lastRecord->getCreatedAt() ?>',
+                                    content: $('#messages-<?= md5($key . $strategy) ?>').html()
+                                })
+                            })
+                        }
+                    );
+                    // ]]></script>
+
+                <div class="wrapper" style="width: 100%; border: #cfcfcf 1px solid; margin-bottom: 20px">
+                    <div id="left" style="float: left; width: 50%;">
+                        <canvas id="main-<?= $strategy ?>-<?= str_replace('=', '', $key) ?>"
+                                height="<?= $block->getChartHeight() ?>px"></canvas>
+                    </div>
+                    <div id="right" style="float: right; width: 50%;">
+                        <canvas id="ttfb-<?= $strategy ?>-<?= str_replace('=', '', $key) ?>"
+                                height="<?= $block->getChartHeight() ?>px"></canvas>
+                    </div>
+                    <div style="clear: both;"></div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+
+    <?php endif; ?>
+<?php endforeach; ?>

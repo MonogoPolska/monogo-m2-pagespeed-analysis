@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<!--
+/**
+ * @author Monogo
+ * @copyright Copyright (c) 2019 Monogo (https://monogo.pl)
+ * @package Monogo_PagespeedAnalysis
+ */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <pagespeed>
+            <general>
+                <enable>0</enable>
+                <apitoken backend_model="Magento\Config\Model\Config\Backend\Encrypted"></apitoken>
+                <strategy>mobile,desktop</strategy>
+                <use_cron>0</use_cron>
+                <cron_expr></cron_expr>
+            </general>
+            <chart>
+                <height>150</height>
+                <history>30</history>
+                <performance>#4268b3</performance>
+                <seo>#d46fd4</seo>
+                <pwa>#f2970e</pwa>
+                <best_practices>#24a318</best_practices>
+                <accessibility>#f5d60c</accessibility>
+                <ttfb>#0c90f5</ttfb>
+            </chart>
+        </pagespeed>
+    </default>
+</config>

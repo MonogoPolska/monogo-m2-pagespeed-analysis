@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+
+<!--
+/**
+ * @author Monogo
+ * @copyright Copyright (c) 2019 Monogo (https://monogo.pl)
+ * @package Monogo_PagespeedAnalysis
+ */
+-->
+
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="monogo_pagespeed" resource="default" comment="PageSpeed data">
+        <column xsi:type="int" name="entity_id" identity="true" unsigned="true" comment="Entity Auto Increment" />
+        <column xsi:type="datetime" name="created_at" on_update="false" default="CURRENT_TIMESTAMP" nullable="false" comment="Created at" />
+        <column xsi:type="varchar" name="url" length="512" nullable="false" comment="URL" />
+        <column xsi:type="int" name="ttfb" nullable="false" comment="Time To First Byte" />
+        <column xsi:type="varchar" name="mode" length="20" nullable="false" comment="Desktop/mobile" />
+        <column xsi:type="varchar" name="overall_category" length="30" nullable="false" comment="Overall" />
+        <column xsi:type="float" name="performance_score" nullable="true" comment="Performance" />
+        <column xsi:type="float" name="accessibility_score" nullable="true" comment="Accessibility" />
+        <column xsi:type="float" name="best_practices_score" nullable="true" comment="Best Practices" />
+        <column xsi:type="float" name="seo_score" nullable="true" comment="SEO" />
+        <column xsi:type="float" name="pwa_score" nullable="true" comment="PWA" />
+        <column xsi:type="longtext" name="render_blocking_resources"  comment="Render blocking resources" />
+        <column xsi:type="longtext" name="network_requests"  comment="Network requests" />
+        <column xsi:type="text" name="comment"  comment="Comment" />
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <index referenceId="PAGESPEED_CREATED_AT" indexType="btree">
+            <column name="created_at"/>
+        </index>
+        <index referenceId="PAGESPEED_URL" indexType="btree">
+            <column name="url"/>
+        </index>
+        <index referenceId="PAGESPEED_MODE" indexType="btree">
+            <column name="mode"/>
+        </index>
+        <index referenceId="PAGESPEED_TTFB" indexType="btree">
+            <column name="ttfb"/>
+        </index>
+        <index referenceId="PAGESPEED_OVERALL_CATEGORY" indexType="btree">
+            <column name="overall_category"/>
+        </index>
+        <index referenceId="PAGESPEED_PERFORMANCE" indexType="btree">
+            <column name="performance_score"/>
+        </index>
+        <index referenceId="PAGESPEED_ACCESSIBILITY" indexType="btree">
+            <column name="accessibility_score"/>
+        </index>
+        <index referenceId="PAGESPEED_BEST_PRACTICES" indexType="btree">
+            <column name="best_practices_score"/>
+        </index>
+        <index referenceId="PAGESPEED_SEO" indexType="btree">
+            <column name="seo_score"/>
+        </index>
+        <index referenceId="PAGESPEED_SEARCH" indexType="btree">
+            <column name="url"/>
+            <column name="mode"/>
+            <column name="created_at"/>
+        </index>
+    </table>
+</schema>

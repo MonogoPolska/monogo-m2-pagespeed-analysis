@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+
+<!--
+/**
+ * @author Monogo
+ * @copyright Copyright (c) 2019 Monogo (https://monogo.pl)
+ * @package Monogo_PagespeedAnalysis
+ */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="monogo" translate="label, comment" sortOrder="9000" class="monogo-tab">
+            <label>Monogo</label>
+        </tab>
+        <section id="pagespeed" translate="label, comment" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
+            <class>separator-top</class>
+            <label>Pagespeed Analysis</label>
+            <tab>monogo</tab>
+            <resource>Monogo_PagespeedAnalysis::config</resource>
+            <group id="general" translate="label, comment" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>General Configuration</label>
+                <field id="enable" translate="label, comment" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable Module</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="apitoken" translate="label, comment" type="obscure" sortOrder="200" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>PageSpeed Insights API Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <validate>required-entry</validate>
+                    <depends>
+                        <field id="pagespeed/general/enable">1</field>
+                    </depends>
+                    <comment><![CDATA[To get new API TOKEN click <a href="https://developers.google.com/speed/docs/insights/v5/get-started" target="_blank">here</a> -> Get A Key]]></comment>
+                </field>
+                <field id="strategy" translate="label" type="multiselect" sortOrder="300" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Strategy</label>
+                    <source_model>Monogo\PagespeedAnalysis\Model\System\Config\Strategy</source_model>
+                    <validate>required-entry validate-select</validate>
+                    <depends>
+                        <field id="pagespeed/general/enable">1</field>
+                    </depends>
+                </field>
+                <field id="use_cron" translate="label" type="select" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Use Magento Cron</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="pagespeed/general/enable">1</field>
+                    </depends>
+                    <comment>You can disable Magento Cron and run script from shell by php bin/magento monogo:pagespeed:run</comment>
+                </field>
+                <field id="cron_expr" translate="label" type="text" sortOrder="500" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Cron schedule</label>
+                    <depends>
+                        <field id="pagespeed/general/enable">1</field>
+                        <field id="pagespeed/general/use_cron">1</field>
+                    </depends>
+                    <comment>Use Crontab Format (Eg. "0 0 * * *" every day at midnight). Recommended value is once a day</comment>
+                </field>
+            </group>
+            <group id="endpoints" translate="label, comment" type="text" sortOrder="200" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Endpoints Configuration</label>
+                <field id="list" translate="label comment" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Endpoint list</label>
+                    <frontend_model>Monogo\PagespeedAnalysis\Block\Adminhtml\System\Config\Dynamicfield</frontend_model>
+                    <backend_model>Monogo\PagespeedAnalysis\Model\System\Config\Dynamicfield</backend_model>
+                    <depends>
+                        <field id="pagespeed/general/enable">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="chart" translate="label, comment" type="text" sortOrder="300" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Chart Configuration</label>
+                <field id="history" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Show last</label>
+                    <source_model>Monogo\PagespeedAnalysis\Model\System\Config\History</source_model>
+                    <validate>required-entry validate-select</validate>
+                    <depends>
+                        <field id="pagespeed/general/enable">1</field>
+                    </depends>
+                </field>
+                <field id="height" translate="label comment" type="text" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Chart height in px</label>
+                    <validate>validate-digits</validate>
+                    <depends>
+                        <field id="pagespeed/general/enable">1</field>
+                    </depends>
+                </field>
+                <field id="performance" translate="label comment" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Performance line color</label>
+                    <frontend_model>Monogo\PagespeedAnalysis\Block\Adminhtml\System\Config\Color</frontend_model>
+                    <depends>
+                        <field id="pagespeed/general/enable">1</field>
+                    </depends>
+                </field>
+                <field id="seo" translate="label comment" type="text" sortOrder="200" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>SEO line color</label>
+                    <frontend_model>Monogo\PagespeedAnalysis\Block\Adminhtml\System\Config\Color</frontend_model>
+                    <depends>
+                        <field id="pagespeed/general/enable">1</field>
+                    </depends>
+                </field>
+                <field id="pwa" translate="label comment" type="text" sortOrder="300" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>PWA line color</label>
+                    <frontend_model>Monogo\PagespeedAnalysis\Block\Adminhtml\System\Config\Color</frontend_model>
+                    <depends>
+                        <field id="pagespeed/general/enable">1</field>
+                    </depends>
+                </field>
+                <field id="best_practices" translate="label comment" type="text" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Best Practices line color</label>
+                    <frontend_model>Monogo\PagespeedAnalysis\Block\Adminhtml\System\Config\Color</frontend_model>
+                    <depends>
+                        <field id="pagespeed/general/enable">1</field>
+                    </depends>
+                </field>
+                <field id="accessibility" translate="label comment" type="text" sortOrder="500" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Accessibility line color</label>
+                    <frontend_model>Monogo\PagespeedAnalysis\Block\Adminhtml\System\Config\Color</frontend_model>
+                    <depends>
+                        <field id="pagespeed/general/enable">1</field>
+                    </depends>
+                </field>
+                <field id="ttfb" translate="label comment" type="text" sortOrder="600" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>TTFB line color</label>
+                    <frontend_model>Monogo\PagespeedAnalysis\Block\Adminhtml\System\Config\Color</frontend_model>
+                    <depends>
+                        <field id="pagespeed/general/enable">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="debug" translate="label, comment" type="text" sortOrder="900" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Debug Configuration</label>
+                <depends>
+                    <field id="pagespeed/general/enable">1</field>
+                </depends>
+                <field id="enable_log" translate="label, comment" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable Logging</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="pagespeed/general/enable">1</field>
+                    </depends>
+                    <comment>Log to file var/log/pagespeed.log</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

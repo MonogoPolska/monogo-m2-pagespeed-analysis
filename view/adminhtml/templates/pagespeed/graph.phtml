@@ -1,0 +1,32 @@
+<?php
+/**
+ * Graph template
+ *
+ * @category PagespeedAnalysis
+ * @package  Monogo|PagespeedAnalysis
+ * @author   Paweł Detka <pawel.detka@monogo.pl>
+ */
+?>
+<?php
+/**
+ * @var $block \Monogo\PagespeedAnalysis\Block\Adminhtml\Pagespeed\Graph
+ */
+?>
+
+<?php
+$graphData = $block->getChartData();
+?>
+
+<?php $tabs = $block->getChildBlock('pagespeed_tabs')->setData('graph', $graphData); ?>
+<?= $tabs->toHtml(); ?>
+
+<?php $tabContent = $block->getChildBlock('pagespeed_tab_content')->setData('graph', $graphData); ?>
+<?= $tabContent->toHtml(); ?>
+
+<?php $chartScript = $block->getChildBlock('pagespeed_chart_script')->setData('graph', $graphData); ?>
+<?= $chartScript->toHtml(); ?>
+
+<?php $tabScript = $block->getChildBlock('pagespeed_tab_script')->setData('graph', $graphData); ?>
+<?= $tabScript->toHtml(); ?>
+
+

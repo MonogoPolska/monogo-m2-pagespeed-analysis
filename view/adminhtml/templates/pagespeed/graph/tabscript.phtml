@@ -1,0 +1,36 @@
+<?php
+/**
+ * Graph template
+ *
+ * @category PagespeedAnalysis
+ * @package  Monogo|PagespeedAnalysis
+ * @author   Paweł Detka <pawel.detka@monogo.pl>
+ */
+?>
+<?php
+/**
+ * @var $block \Monogo\PagespeedAnalysis\Block\Adminhtml\Pagespeed\Graph\TabScript
+ */
+?>
+
+<?php
+$graphData = $this->getData('graph');
+?>
+<script>
+    document.getElementById("tab-defaultOpen").click();
+
+    function openTab(evt, cityName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+</script>

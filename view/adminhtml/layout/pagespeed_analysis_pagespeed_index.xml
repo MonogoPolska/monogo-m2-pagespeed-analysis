@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<!--
+/**
+ * @author Monogo
+ * @copyright Copyright (c) 2019 Monogo (https://monogo.pl)
+ * @package Monogo_PagespeedAnalysis
+ */
+-->
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Monogo_PagespeedAnalysis::css/pagespeed.css"/>
+    </head>
+    <body>
+        <referenceContainer name="page.main.actions">
+            <block class="Monogo\PagespeedAnalysis\Block\Adminhtml\Pagespeed\Graph" name="page.actions.toolbar" after="-">
+            <block class="Monogo\PagespeedAnalysis\Block\Adminhtml\Pagespeed\Graph\Tabs" name="pagespeed_tabs"/>
+            <block class="Monogo\PagespeedAnalysis\Block\Adminhtml\Pagespeed\Graph\TabContent" name="pagespeed_tab_content"/>
+            <block class="Monogo\PagespeedAnalysis\Block\Adminhtml\Pagespeed\Graph\ChartScript" name="pagespeed_chart_script"/>
+            <block class="Monogo\PagespeedAnalysis\Block\Adminhtml\Pagespeed\Graph\TabScript" name="pagespeed_tab_script"/>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <uiComponent name="pagespeed_listing"/>
+        </referenceContainer>
+    </body>
+</page>

@@ -1,0 +1,48 @@
+<?php
+/**
+ * Graph template
+ *
+ * @category PagespeedAnalysis
+ * @package  Monogo|PagespeedAnalysis
+ * @author   Paweł Detka <pawel.detka@monogo.pl>
+ */
+?>
+<?php
+/**
+ * @var $block \Monogo\PagespeedAnalysis\Block\Adminhtml\Pagespeed\Graph/Tabs
+ */
+?>
+
+<?php
+$graphData = $this->getData('graph');
+?>
+
+<?php $defaultTab = 'defaultOpen' ?>
+<div class="tab">
+    <?php foreach ($graphData as $key => $item): ?>
+        <button class="tablinks" id="tab-<?= $defaultTab ?>"
+                onclick="openTab(event, '<?= md5($key) ?>')"><?= base64_decode($key) ?></button>
+        <?php $defaultTab = md5($key) ?>
+    <?php endforeach; ?>
+</div>
+
+<script>
+
+    document.getElementById("tab-defaultOpen").click();
+
+    function openTab(evt, cityName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+</script>
+
