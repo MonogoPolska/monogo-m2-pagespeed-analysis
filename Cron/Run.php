@@ -1,6 +1,6 @@
 <?php
 
-namespace Jti\ConfirmOrder\Cron;
+namespace Monogo\PagespeedAnalysis\Cron;
 
 use Monogo\PagespeedAnalysis\Helper\Config;
 use Monogo\PagespeedAnalysis\Model\CollectData;
