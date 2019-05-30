@@ -20,8 +20,10 @@ $graphData = $this->getData('graph');
 <?php $defaultTab = 'defaultOpen' ?>
 <div class="tab">
     <?php foreach ($graphData as $key => $item): ?>
-        <button class="tablinks" id="tab-<?= $defaultTab ?>"
-                onclick="openTab(event, '<?= md5($key) ?>')"><?= base64_decode($key) ?></button>
-        <?php $defaultTab = md5($key) ?>
+        <?php if (!empty($item)): ?>
+            <button class="tablinks" id="tab-<?= $defaultTab ?>"
+                    onclick="openTab(event, '<?= md5($key) ?>')"><?= base64_decode($key) ?></button>
+            <?php $defaultTab = md5($key) ?>
+        <?php endif; ?>
     <?php endforeach; ?>
 </div>

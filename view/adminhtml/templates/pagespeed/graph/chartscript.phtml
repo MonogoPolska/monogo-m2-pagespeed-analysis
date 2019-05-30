@@ -67,6 +67,10 @@ $graphData = $this->getData('graph');
                 ]
             },
             "options": {
+                title: {
+                    display: true,
+                    text: 'Pagespeed score for <?= base64_decode($key) ?> (<?= __('last') . ' ' . $block->getChartHistory() . ' ' . __('days') ?>)'
+                },
                 tooltips: {
                     intersect: true,
                     mode: 'index'
@@ -97,6 +101,10 @@ $graphData = $this->getData('graph');
                 }]
             },
             "options": {
+                title: {
+                    display: true,
+                    text: 'Time To First Byte for <?= base64_decode($key) ?> (<?= __('last') . ' ' . $block->getChartHistory() . ' ' . __('days') ?>)'
+                },
                 scales: {
                     yAxes: [{
                         ticks: {

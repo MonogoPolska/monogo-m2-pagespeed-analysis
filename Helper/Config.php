@@ -126,10 +126,14 @@ class Config extends AbstractHelper
         if (empty($this->endpointList)) {
             $endpointConfig = json_decode($this->getConfig(self::CONFIG_PATH . self::ENDPOINTS_LIST), true);
 
-            foreach ($endpointConfig as $endpointConfigItem) {
-                if ($endpointConfigItem['col_2'] == 1) {
-                    $this->endpointList[] = rtrim($endpointConfigItem['col_1'], '/');
+            if (!empty($endpointConfig)) {
+                foreach ($endpointConfig as $endpointConfigItem) {
+                    if ($endpointConfigItem['col_2'] == 1) {
+                        $this->endpointList[] = rtrim($endpointConfigItem['col_1'], '/');
+                    }
                 }
+            } else {
+                $this->endpointList = [];
             }
         }
         return $this->endpointList;

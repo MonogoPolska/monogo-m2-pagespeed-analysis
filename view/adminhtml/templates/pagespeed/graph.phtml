@@ -17,16 +17,20 @@
 $graphData = $block->getChartData();
 ?>
 
-<?php $tabs = $block->getChildBlock('pagespeed_tabs')->setData('graph', $graphData); ?>
-<?= $tabs->toHtml(); ?>
+<?php if (!$graphData): ?>
+    <?= __('Empty chart data. Please configure module and run script.') ?>
+<?php else: ?>
+    <?php $tabs = $block->getChildBlock('pagespeed_tabs')->setData('graph', $graphData); ?>
+    <?= $tabs->toHtml(); ?>
 
-<?php $tabContent = $block->getChildBlock('pagespeed_tab_content')->setData('graph', $graphData); ?>
-<?= $tabContent->toHtml(); ?>
+    <?php $tabContent = $block->getChildBlock('pagespeed_tab_content')->setData('graph', $graphData); ?>
+    <?= $tabContent->toHtml(); ?>
 
-<?php $chartScript = $block->getChildBlock('pagespeed_chart_script')->setData('graph', $graphData); ?>
-<?= $chartScript->toHtml(); ?>
+    <?php $chartScript = $block->getChildBlock('pagespeed_chart_script')->setData('graph', $graphData); ?>
+    <?= $chartScript->toHtml(); ?>
 
-<?php $tabScript = $block->getChildBlock('pagespeed_tab_script')->setData('graph', $graphData); ?>
-<?= $tabScript->toHtml(); ?>
+    <?php $tabScript = $block->getChildBlock('pagespeed_tab_script')->setData('graph', $graphData); ?>
+    <?= $tabScript->toHtml(); ?>
+<?php endif; ?>
 
 
