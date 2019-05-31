@@ -16,6 +16,7 @@
 <?php
 $graphData = $this->getData('graph');
 ?>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 <script>
     document.getElementById("tab-defaultOpen").click();
 
@@ -31,6 +32,17 @@ $graphData = $this->getData('graph');
         }
         document.getElementById(tabId).style.display = "block";
         evt.currentTarget.className += " active";
+    }
+
+    function downloadChart(chartId, filename) {
+        html2canvas(document.getElementById(chartId), {
+            onrendered: function (canvas) {
+                var link = document.createElement('a');
+                link.href = canvas.toDataURL('image/jpeg');
+                link.download = filename + '.jpeg';
+                link.click();
+            }
+        })
     }
 
 </script>

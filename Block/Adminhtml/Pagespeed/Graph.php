@@ -33,6 +33,8 @@ class Graph extends Widget
 
     protected $score;
 
+    protected $maxTtfb;
+
     /**
      * @var string
      */
@@ -130,6 +132,13 @@ class Graph extends Widget
         return $chartData;
     }
 
+    /**
+     * Get Endpoint's last record
+     *
+     * @param string $endpoint Endpoint
+     *
+     * @return mixed
+     */
     public function getLastRecord($endpoint, $mode)
     {
         /**
@@ -149,6 +158,43 @@ class Graph extends Widget
     }
 
     /**
+     * Get Max TTFB
+     *
+     * @return mixed
+     */
+    public function getMaxTtfb()
+    {
+        if ($this->maxTtfb === null) {
+            /**
+             * @var \Monogo\PagespeedAnalysis\Model\ResourceModel\Pagespeed\Collection $collection
+             */
+            $collection = $this->collectionFactory->create();
+            $collection->addFieldToSelect('ttfb');
+            $collection->addFieldToFilter('created_at', ['gt' => $this->getFilterDate()]);
+            $collection->setOrder('ttfb', 'desc');
+            $this->maxTtfb = ceil($collection->getFirstItem()->getTtfb() / 100) * 100;
+        }
+        return $this->maxTtfb;
+    }
+
+    /**
+     * Get filename from base64 decoded URL key
+     *
+     * @param string $key Base64 Key
+     *
+     * @return string
+     */
+    public function getFilenameFromKey($key)
+    {
+        $urlFilename = base64_decode($key);
+        $urlFilename = str_replace('https://', '', $urlFilename);
+        $urlFilename = str_replace('/', '_', $urlFilename);
+        $urlFilename = str_replace('&', '_', $urlFilename);
+        $urlFilename = str_replace('?', '_', $urlFilename);
+        return $urlFilename;
+    }
+
+    /**
      * Get Chart Height
      *
      * @return string
@@ -156,6 +202,26 @@ class Graph extends Widget
     public function getChartHeight()
     {
         return $this->config->getChartHeight();
+    }
+
+    /**
+     * Get Enable Animations
+     *
+     * @return int
+     */
+    public function getEnableAnimations()
+    {
+        return $this->config->getEnableAnimations();
+    }
+
+    /**
+     * Get Use Auto Scale
+     *
+     * @return int
+     */
+    public function getUseAutoScale()
+    {
+        return $this->config->getUseAutoScale();
     }
 
     /**

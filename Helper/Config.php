@@ -30,6 +30,10 @@ class Config extends AbstractHelper
 
     const CHART_HEIGHT = 'chart/height';
 
+    const CHART_ANIMATIONS= 'chart/animations';
+
+    const CHART_AUTOSCALE = 'chart/autoscale';
+
     const CHART_HISTORY = 'chart/history';
 
     const CHART_PERFORMANCE_COLOR = 'chart/performance';
@@ -147,6 +151,26 @@ class Config extends AbstractHelper
     public function getChartHeight()
     {
         return $this->getConfig(self::CONFIG_PATH . self::CHART_HEIGHT);
+    }
+
+    /**
+     * Get Enable Animations
+     *
+     * @return int
+     */
+    public function getEnableAnimations()
+    {
+        return $this->getConfig(self::CONFIG_PATH . self::CHART_ANIMATIONS);
+    }
+
+    /**
+     * Get Use Auto Scale
+     *
+     * @return int
+     */
+    public function getUseAutoScale()
+    {
+        return $this->getConfig(self::CONFIG_PATH . self::CHART_AUTOSCALE);
     }
 
     /**

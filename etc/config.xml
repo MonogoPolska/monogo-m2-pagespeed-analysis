@@ -20,6 +20,8 @@
             </general>
             <chart>
                 <height>150</height>
+                <autoscale>0</autoscale>
+                <animations>0</animations>
                 <history>30</history>
                 <performance>#4268b3</performance>
                 <seo>#d46fd4</seo>

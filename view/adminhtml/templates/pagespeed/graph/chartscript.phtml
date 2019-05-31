@@ -67,17 +67,27 @@ $graphData = $this->getData('graph');
                 ]
             },
             "options": {
+                <?php if(!$this->getEnableAnimations()): ?>
+                animation:{
+                    duration: 0
+                },
+                <?php endif; ?>
                 title: {
                     display: true,
-                    text: 'Pagespeed score for <?= base64_decode($key) ?> (<?= __('last') . ' ' . $block->getChartHistory() . ' ' . __('days') ?>)'
+                    text: 'PageSpeed score for <?= base64_decode($key) ?> (<?= __('last') . ' ' . $block->getChartHistory() . ' ' . __('days') ?>)'
                 },
                 tooltips: {
-                    intersect: true,
+                    position: 'nearest',
+                    intersect: false,
                     mode: 'index'
                 },
                 scales: {
                     yAxes: [{
                         ticks: {
+                            <?php if(!$this->getUseAutoscale()): ?>
+                            beginAtZero: true,
+                            max: 100,
+                            <?php endif; ?>
                             callback: function (value, index, values) {
                                 return value + '%';
                             }
@@ -101,13 +111,27 @@ $graphData = $this->getData('graph');
                 }]
             },
             "options": {
+                <?php if(!$this->getEnableAnimations()): ?>
+                animation:{
+                    duration: 0
+                },
+                <?php endif; ?>
                 title: {
                     display: true,
                     text: 'Time To First Byte for <?= base64_decode($key) ?> (<?= __('last') . ' ' . $block->getChartHistory() . ' ' . __('days') ?>)'
                 },
+                tooltips: {
+                    position: 'nearest',
+                    intersect: false,
+                    mode: 'index'
+                },
                 scales: {
                     yAxes: [{
                         ticks: {
+                            <?php if(!$this->getUseAutoscale()): ?>
+                            beginAtZero: true,
+                            max: <?= $this->getMaxTtfb() ?>,
+                            <?php endif; ?>
                             callback: function (value, index, values) {
                                 return value + 'ms';
                             }

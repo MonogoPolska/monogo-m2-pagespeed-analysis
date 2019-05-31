@@ -71,7 +71,7 @@
             </group>
             <group id="chart" translate="label, comment" type="text" sortOrder="300" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Chart Configuration</label>
-                <field id="history" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="history" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Show last</label>
                     <source_model>Monogo\PagespeedAnalysis\Model\System\Config\History</source_model>
                     <validate>required-entry validate-select</validate>
@@ -79,49 +79,58 @@
                         <field id="pagespeed/general/enable">1</field>
                     </depends>
                 </field>
-                <field id="height" translate="label comment" type="text" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="height" translate="label comment" type="text" sortOrder="200" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Chart height in px</label>
                     <validate>validate-digits</validate>
                     <depends>
                         <field id="pagespeed/general/enable">1</field>
                     </depends>
                 </field>
-                <field id="performance" translate="label comment" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="autoscale" translate="label, comment" type="select" sortOrder="300" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Use Auto Scale</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>If No selected, all charts will have the same min and max values</comment>
+                </field>
+                <field id="animations" translate="label, comment" type="select" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable chart animations</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="performance" translate="label comment" type="text" sortOrder="500" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Performance line color</label>
                     <frontend_model>Monogo\PagespeedAnalysis\Block\Adminhtml\System\Config\Color</frontend_model>
                     <depends>
                         <field id="pagespeed/general/enable">1</field>
                     </depends>
                 </field>
-                <field id="seo" translate="label comment" type="text" sortOrder="200" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="seo" translate="label comment" type="text" sortOrder="600" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>SEO line color</label>
                     <frontend_model>Monogo\PagespeedAnalysis\Block\Adminhtml\System\Config\Color</frontend_model>
                     <depends>
                         <field id="pagespeed/general/enable">1</field>
                     </depends>
                 </field>
-                <field id="pwa" translate="label comment" type="text" sortOrder="300" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="pwa" translate="label comment" type="text" sortOrder="700" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>PWA line color</label>
                     <frontend_model>Monogo\PagespeedAnalysis\Block\Adminhtml\System\Config\Color</frontend_model>
                     <depends>
                         <field id="pagespeed/general/enable">1</field>
                     </depends>
                 </field>
-                <field id="best_practices" translate="label comment" type="text" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="best_practices" translate="label comment" type="text" sortOrder="800" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Best Practices line color</label>
                     <frontend_model>Monogo\PagespeedAnalysis\Block\Adminhtml\System\Config\Color</frontend_model>
                     <depends>
                         <field id="pagespeed/general/enable">1</field>
                     </depends>
                 </field>
-                <field id="accessibility" translate="label comment" type="text" sortOrder="500" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="accessibility" translate="label comment" type="text" sortOrder="900" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Accessibility line color</label>
                     <frontend_model>Monogo\PagespeedAnalysis\Block\Adminhtml\System\Config\Color</frontend_model>
                     <depends>
                         <field id="pagespeed/general/enable">1</field>
                     </depends>
                 </field>
-                <field id="ttfb" translate="label comment" type="text" sortOrder="600" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="ttfb" translate="label comment" type="text" sortOrder="1000" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>TTFB line color</label>
                     <frontend_model>Monogo\PagespeedAnalysis\Block\Adminhtml\System\Config\Color</frontend_model>
                     <depends>

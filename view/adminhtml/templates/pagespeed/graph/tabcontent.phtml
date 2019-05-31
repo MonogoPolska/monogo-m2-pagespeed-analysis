@@ -23,7 +23,8 @@ $graphData = $this->getData('graph');
             <?php $defaultTab = md5($key) ?>
             <?php foreach ($item as $strategy => $data): ?>
                 <?php $lastRecord = $block->getLastRecord(base64_decode($key), $strategy); ?>
-                <h3><?= strtoupper($strategy) ?> (<?= __('Last') . ' ' . $block->getChartHistory() . ' ' . __('days') ?>)</h3>
+                <h3><?= strtoupper($strategy) ?> (<?= __('Last') . ' ' . $block->getChartHistory() . ' ' . __('days') ?>
+                    )</h3>
                 <button id="show_details-<?= $strategy ?>-<?= str_replace('=', '', $key) ?>"
                         title="<?= __('Show details') ?>" type="button"
                         class="action-secondary scalable save ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only <?= md5($key . $strategy) ?>">
@@ -31,6 +32,7 @@ $graphData = $this->getData('graph');
                         <span><?= __('Show details') ?></span>
                     </span>
                 </button>
+
                 <div id="messages-<?= md5($key . $strategy) ?>" style="display: none">
                     <div class="message">
 
@@ -111,14 +113,21 @@ $graphData = $this->getData('graph');
                     );
                     // ]]></script>
 
+            <?php $urlFilename = $this->getFilenameFromKey($key); ?>
                 <div class="wrapper" style="width: 100%; border: #cfcfcf 1px solid; margin-bottom: 20px">
                     <div id="left" style="float: left; width: 50%;">
+                        <button onclick="downloadChart('main-<?= $strategy ?>-<?= str_replace('=', '', $key) ?>','<?= $urlFilename.'-score-'.$strategy.'-'.date('Y-m-d_H-i-s') ?>')">
+                            <span style="font-size: x-small"><?= __('save chart as image') ?></span>
+                        </button>
                         <canvas id="main-<?= $strategy ?>-<?= str_replace('=', '', $key) ?>"
-                                height="<?= $block->getChartHeight() ?>px"></canvas>
+                                height="<?= $block->getChartHeight() ?>px" style="background: #f8f8f8"></canvas>
                     </div>
                     <div id="right" style="float: right; width: 50%;">
+                        <button onclick="downloadChart('ttfb-<?= $strategy ?>-<?= str_replace('=', '', $key) ?>','<?= $urlFilename.'-ttfb-'.$strategy.'-'.date('Y-m-d_H-i-s') ?>')">
+                            <span style="font-size: x-small"><?= __('save chart as image') ?></span>
+                        </button>
                         <canvas id="ttfb-<?= $strategy ?>-<?= str_replace('=', '', $key) ?>"
-                                height="<?= $block->getChartHeight() ?>px"></canvas>
+                                height="<?= $block->getChartHeight() ?>px" style="background: #f8f8f8"></canvas>
                     </div>
                     <div style="clear: both;"></div>
                 </div>

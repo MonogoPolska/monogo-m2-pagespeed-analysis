@@ -37,7 +37,7 @@ Go to Stores->Configuration->Monogo->Pagespeed Analysis
 - Use Magento Cron - You can disable Magento cron and run PageSpeed scan from shell (recommended) **Default value is 0 (No)**
 - Cron schedule - Use Crontab Format (Eg. "0 0 * * *" every day at 01:05)
 - Provide website / websites to scan
-- Additional charts configuration (show las X days, colors, chart height)
+- Additional charts configuration (show last X days, colors, chart height, use auto scale)
 - Debug settings
 
 ### Default values:
@@ -87,3 +87,4 @@ This comment will be visible on charts after page refresh.
 
 # **TODO**
 - email weekly reports
+- Tests
