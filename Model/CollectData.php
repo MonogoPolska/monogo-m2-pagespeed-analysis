@@ -235,11 +235,13 @@ class CollectData
             return false;
         }
 
-        if (!key_exists('firstContentfulPaint', $responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0])) {
+        if (!key_exists('firstContentfulPaint',
+            $responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0])) {
             $this->logger->log('Empty firstContentfulPaint');
             return false;
         }
-        if (!key_exists('firstMeaningfulPaint', $responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0])) {
+        if (!key_exists('firstMeaningfulPaint',
+            $responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0])) {
             $this->logger->log('Empty firstMeaningfulPaint');
             return false;
         }
@@ -248,11 +250,13 @@ class CollectData
             return false;
         }
 
-        if (!key_exists('interactive', $responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0])) {
+        if (!key_exists('interactive',
+            $responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0])) {
             $this->logger->log('Empty interactive');
             return false;
         }
-        if (!key_exists('firstCPUIdle', $responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0])) {
+        if (!key_exists('firstCPUIdle',
+            $responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0])) {
             $this->logger->log('Empty firstCPUIdle');
             return false;
         }
