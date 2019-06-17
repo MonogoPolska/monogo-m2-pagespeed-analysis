@@ -27,13 +27,25 @@ class Graph extends Widget
      */
     protected $config;
 
+    /**
+     * @var string
+     */
     protected $date = null;
 
+    /**
+     * @var array
+     */
     protected $collection = [];
 
+    /**
+     * @var Score
+     */
     protected $score;
 
-    protected $maxTtfb;
+    /**
+     * @var array
+     */
+    protected $maxTimeValue = [];
 
     /**
      * @var string
@@ -122,6 +134,11 @@ class Graph extends Widget
                 $data[$item->getMode()]['pwa'][] = $item->getPwaScore() * 100;
                 $data[$item->getMode()]['seo'][] = $item->getSeoScore() * 100;
                 $data[$item->getMode()]['ttfb'][] = $item->getTtfb();
+                $data[$item->getMode()]['first_contentful_paint'][] = $item->getFirstContentfulPaint();
+                $data[$item->getMode()]['first_meaningful_paint'][] = $item->getFirstMeaningfulPaint();
+                $data[$item->getMode()]['speed_index'][] = $item->getSpeedIndex();
+                $data[$item->getMode()]['interactive'][] = $item->getInteractive();
+                $data[$item->getMode()]['first_cpu_idle'][] = $item->getFirstCpuIdle();
                 $data[$item->getMode()]['performance'][] = $item->getPerformanceScore() * 100;
                 $data[$item->getMode()]['accessibility'][] = $item->getAccessibilityScore() * 100;
                 $data[$item->getMode()]['best_practices'][] = $item->getBestPracticesScore() * 100;
@@ -158,23 +175,44 @@ class Graph extends Widget
     }
 
     /**
-     * Get Max TTFB
+     * Get Max Value
      *
-     * @return mixed
+     * @param $strategy
+     *
+     * @return float|int
      */
-    public function getMaxTtfb()
+    public function getMaxValue($strategy)
     {
-        if ($this->maxTtfb === null) {
+        if (!key_exists($strategy, $this->maxTimeValue)) {
             /**
              * @var \Monogo\PagespeedAnalysis\Model\ResourceModel\Pagespeed\Collection $collection
              */
             $collection = $this->collectionFactory->create();
-            $collection->addFieldToSelect('ttfb');
+            $collection->addFieldToSelect([
+                'ttfb',
+                'first_contentful_paint',
+                'first_meaningful_paint',
+                'speed_index',
+                'interactive',
+                'first_cpu_idle',
+            ]);
             $collection->addFieldToFilter('created_at', ['gt' => $this->getFilterDate()]);
-            $collection->setOrder('ttfb', 'desc');
-            $this->maxTtfb = ceil($collection->getFirstItem()->getTtfb() / 100) * 100;
+            $collection->addFieldToFilter('mode', $strategy);
+            $maxValue = 0;
+            foreach ($collection->getItems() as $item) {
+                $data = $item->getData();
+                unset($data['entity_id']);
+
+                $max = max($data);
+
+                if ($max > $maxValue) {
+                    $maxValue = $max;
+                }
+            }
+
+            $this->maxTimeValue[$strategy] = ceil($maxValue / 100) * 100;
         }
-        return $this->maxTtfb;
+        return $this->maxTimeValue[$strategy];
     }
 
     /**
@@ -285,6 +323,56 @@ class Graph extends Widget
     }
 
     /**
+     * Get First Meaningful Paint color
+     *
+     * @return string
+     */
+    public function getFirstMeaningfulPaintColor()
+    {
+        return $this->config->getChartFirstMeaningfulPaintColor();
+    }
+
+    /**
+     * Get First Contentful Paint color
+     *
+     * @return string
+     */
+    public function getFirstContentfulPaintColor()
+    {
+        return $this->config->getChartFirstContentfulPaintColor();
+    }
+
+    /**
+     * Get Interactive color
+     *
+     * @return string
+     */
+    public function getInteractiveColor()
+    {
+        return $this->config->getChartInteractiveColor();
+    }
+
+    /**
+     * Get Speed Index color
+     *
+     * @return string
+     */
+    public function getSpeedIndexColor()
+    {
+        return $this->config->getChartSpeedIndexColor();
+    }
+
+    /**
+     * Get First Cpu Idle color
+     *
+     * @return string
+     */
+    public function getFirstCpuIdleColor()
+    {
+        return $this->config->getChartFirstCpuIdleColor();
+    }
+
+    /**
      * Get Score color
      *
      * @param string $value
@@ -304,5 +392,35 @@ class Graph extends Widget
     public function getChartHistory()
     {
         return $this->config->getChartHistory();
+    }
+
+    /**
+     * Hide X values
+     *
+     * @return int
+     */
+    public function getHideOxValues()
+    {
+        return $this->config->getHideOxValues();
+    }
+
+    /**
+     * Get Point Radius
+     *
+     * @return int
+     */
+    public function getPointRadius()
+    {
+        return $this->config->getPointRadius();
+    }
+
+    /**
+     * Get Point Hover Radius
+     *
+     * @return int
+     */
+    public function getPointHoverRadius()
+    {
+        return $this->config->getPointHoverRadius();
     }
 }

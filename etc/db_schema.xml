@@ -22,6 +22,11 @@
         <column xsi:type="float" name="best_practices_score" nullable="true" comment="Best Practices" />
         <column xsi:type="float" name="seo_score" nullable="true" comment="SEO" />
         <column xsi:type="float" name="pwa_score" nullable="true" comment="PWA" />
+        <column xsi:type="float" name="first_contentful_paint" nullable="true" comment="First Contentful Paint" />
+        <column xsi:type="float" name="first_meaningful_paint" nullable="true" comment="First Meaningful Paint" />
+        <column xsi:type="float" name="speed_index" nullable="true" comment="Speed Index" />
+        <column xsi:type="float" name="interactive" nullable="true" comment="Interactive" />
+        <column xsi:type="float" name="first_cpu_idle" nullable="true" comment="First CPU Idle" />
         <column xsi:type="longtext" name="render_blocking_resources"  comment="Render blocking resources" />
         <column xsi:type="longtext" name="network_requests"  comment="Network requests" />
         <column xsi:type="text" name="comment"  comment="Comment" />
@@ -56,8 +61,27 @@
         <index referenceId="PAGESPEED_SEO" indexType="btree">
             <column name="seo_score"/>
         </index>
-        <index referenceId="PAGESPEED_SEARCH" indexType="btree">
+        <index referenceId="PAGESPEED_FCP" indexType="btree">
+            <column name="first_contentful_paint"/>
+        </index>
+        <index referenceId="PAGESPEED_FMP" indexType="btree">
+            <column name="first_meaningful_paint"/>
+        </index>
+        <index referenceId="PAGESPEED_SPEED_INDEX" indexType="btree">
+            <column name="speed_index"/>
+        </index>
+        <index referenceId="PAGESPEED_INTERACTIVE" indexType="btree">
+            <column name="interactive"/>
+        </index>
+        <index referenceId="PAGESPEED_FCI" indexType="btree">
+            <column name="first_cpu_idle"/>
+        </index>
+        <index referenceId="PAGESPEED_URL_MODE_CREATED_AT" indexType="btree">
             <column name="url"/>
+            <column name="mode"/>
+            <column name="created_at"/>
+        </index>
+        <index referenceId="PAGESPEED_MODE_CREATED_AT" indexType="btree">
             <column name="mode"/>
             <column name="created_at"/>
         </index>

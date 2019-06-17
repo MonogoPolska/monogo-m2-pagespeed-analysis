@@ -30,7 +30,7 @@ class Config extends AbstractHelper
 
     const CHART_HEIGHT = 'chart/height';
 
-    const CHART_ANIMATIONS= 'chart/animations';
+    const CHART_ANIMATIONS = 'chart/animations';
 
     const CHART_AUTOSCALE = 'chart/autoscale';
 
@@ -47,6 +47,22 @@ class Config extends AbstractHelper
     const CHART_ACCESSIBILITY_COLOR = 'chart/accessibility';
 
     const CHART_TTFB_COLOR = 'chart/ttfb';
+
+    const CHART_FIRST_CONTENTFUL_PAINT_COLOR = 'chart/first_contentful_paint';
+
+    const CHART_FIRST_MEANINGFUL_PAINT_COLOR = 'chart/first_meaningful_paint';
+
+    const CHART_SPEED_INDEX_COLOR = 'chart/speed_index';
+
+    const CHART_INTERACTIVE_COLOR = 'chart/interactive';
+
+    const CHART_FIRST_CPU_IDLE_COLOR = 'chart/first_cpu_idle';
+
+    const CHART_HIDE_X_VALUES = 'chart/hide_x_values';
+
+    const CHART_POINT_RADIUS = 'chart/point_radius';
+
+    const CHART_POINT_HOVER_RADIUS = 'chart/point_hover_radius';
 
     const ENABLE_LOG = 'debug/enable_log';
 
@@ -241,6 +257,86 @@ class Config extends AbstractHelper
     public function getChartTtfbColor()
     {
         return $this->getConfig(self::CONFIG_PATH . self::CHART_TTFB_COLOR);
+    }
+
+    /**
+     * Get First Contentful Paint color
+     *
+     * @return string
+     */
+    public function getChartFirstContentfulPaintColor()
+    {
+        return $this->getConfig(self::CONFIG_PATH . self::CHART_FIRST_CONTENTFUL_PAINT_COLOR);
+    }
+
+    /**
+     * Get First Meaningful Paint color
+     *
+     * @return string
+     */
+    public function getChartFirstMeaningfulPaintColor()
+    {
+        return $this->getConfig(self::CONFIG_PATH . self::CHART_FIRST_MEANINGFUL_PAINT_COLOR);
+    }
+
+    /**
+     * Get Speed Index color
+     *
+     * @return string
+     */
+    public function getChartSpeedIndexColor()
+    {
+        return $this->getConfig(self::CONFIG_PATH . self::CHART_SPEED_INDEX_COLOR);
+    }
+
+    /**
+     * Get Interactive color
+     *
+     * @return string
+     */
+    public function getChartInteractiveColor()
+    {
+        return $this->getConfig(self::CONFIG_PATH . self::CHART_INTERACTIVE_COLOR);
+    }
+
+    /**
+     * Get First Cpu Idle color
+     *
+     * @return string
+     */
+    public function getChartFirstCpuIdleColor()
+    {
+        return $this->getConfig(self::CONFIG_PATH . self::CHART_FIRST_CPU_IDLE_COLOR);
+    }
+
+    /**
+     * Hide X values
+     *
+     * @return int
+     */
+    public function getHideOxValues()
+    {
+        return $this->getConfig(self::CONFIG_PATH . self::CHART_HIDE_X_VALUES);
+    }
+
+    /**
+     * Get point radius
+     *
+     * @return int
+     */
+    public function getPointRadius()
+    {
+        return $this->getConfig(self::CONFIG_PATH . self::CHART_POINT_RADIUS);
+    }
+
+    /**
+     * Get point hover radius
+     *
+     * @return int
+     */
+    public function getPointHoverRadius()
+    {
+        return $this->getConfig(self::CONFIG_PATH . self::CHART_POINT_HOVER_RADIUS);
     }
 
     /**

@@ -147,6 +147,11 @@ class CollectData
         $objectToSave->setBestPracticesScore($responseArray['lighthouseResult']['categories']['best-practices']['score']);
         $objectToSave->setSeoScore($responseArray['lighthouseResult']['categories']['seo']['score']);
         $objectToSave->setPwaScore($responseArray['lighthouseResult']['categories']['pwa']['score']);
+        $objectToSave->setFirstContentfulPaint($responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0]['firstContentfulPaint']);
+        $objectToSave->setFirstMeaningfulPaint($responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0]['firstMeaningfulPaint']);
+        $objectToSave->setSpeedIndex($responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0]['speedIndex']);
+        $objectToSave->setInteractive($responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0]['interactive']);
+        $objectToSave->setFirstCpuIdle($responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0]['firstCPUIdle']);
         $objectToSave->setTtfb($this->prepareTtfb($responseArray));
         $objectToSave->setRenderBlockingResources(json_encode($this->prepareRenderBlockingResources($responseArray)));
         $objectToSave->setNetworkRequests(json_encode($this->prepareNetworkRequests($responseArray)));
@@ -210,6 +215,47 @@ class CollectData
             return false;
         }
 
+        if (!key_exists('metrics', $responseArray['lighthouseResult']['audits'])) {
+            $this->logger->log('Empty metrics');
+            return false;
+        }
+
+        if (!key_exists('details', $responseArray['lighthouseResult']['audits']['metrics'])) {
+            $this->logger->log('Empty metrics details');
+            return false;
+        }
+
+        if (!key_exists('items', $responseArray['lighthouseResult']['audits']['metrics']['details'])) {
+            $this->logger->log('Empty metrics items');
+            return false;
+        }
+
+        if (!key_exists(0, $responseArray['lighthouseResult']['audits']['metrics']['details']['items'])) {
+            $this->logger->log('Empty metrics items data');
+            return false;
+        }
+
+        if (!key_exists('firstContentfulPaint', $responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0])) {
+            $this->logger->log('Empty firstContentfulPaint');
+            return false;
+        }
+        if (!key_exists('firstMeaningfulPaint', $responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0])) {
+            $this->logger->log('Empty firstMeaningfulPaint');
+            return false;
+        }
+        if (!key_exists('speedIndex', $responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0])) {
+            $this->logger->log('Empty speedIndex');
+            return false;
+        }
+
+        if (!key_exists('interactive', $responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0])) {
+            $this->logger->log('Empty interactive');
+            return false;
+        }
+        if (!key_exists('firstCPUIdle', $responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0])) {
+            $this->logger->log('Empty firstCPUIdle');
+            return false;
+        }
         return true;
     }
 

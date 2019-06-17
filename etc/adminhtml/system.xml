@@ -91,6 +91,21 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>If No selected, all charts will have the same min and max values</comment>
                 </field>
+                <field id="hide_x_values" translate="label, comment" type="select" sortOrder="350" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Hide X values</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment></comment>
+                </field>
+                <field id="point_radius" translate="label, comment" type="text" sortOrder="370" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Marker radius</label>
+                    <validate>validate-digits</validate>
+                    <comment></comment>
+                </field>
+                <field id="point_hover_radius" translate="label, comment" type="text" sortOrder="390" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Marker hover radius</label>
+                    <validate>validate-digits</validate>
+                    <comment></comment>
+                </field>
                 <field id="animations" translate="label, comment" type="select" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Enable chart animations</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -132,6 +147,41 @@
                 </field>
                 <field id="ttfb" translate="label comment" type="text" sortOrder="1000" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>TTFB line color</label>
+                    <frontend_model>Monogo\PagespeedAnalysis\Block\Adminhtml\System\Config\Color</frontend_model>
+                    <depends>
+                        <field id="pagespeed/general/enable">1</field>
+                    </depends>
+                </field>
+                <field id="first_contentful_paint" translate="label comment" type="text" sortOrder="1100" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>First Contentful Paint line color</label>
+                    <frontend_model>Monogo\PagespeedAnalysis\Block\Adminhtml\System\Config\Color</frontend_model>
+                    <depends>
+                        <field id="pagespeed/general/enable">1</field>
+                    </depends>
+                </field>
+                <field id="first_meaningful_paint" translate="label comment" type="text" sortOrder="1200" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>First Meaningful Paint line color</label>
+                    <frontend_model>Monogo\PagespeedAnalysis\Block\Adminhtml\System\Config\Color</frontend_model>
+                    <depends>
+                        <field id="pagespeed/general/enable">1</field>
+                    </depends>
+                </field>
+                <field id="speed_index" translate="label comment" type="text" sortOrder="1300" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Speed Index line color</label>
+                    <frontend_model>Monogo\PagespeedAnalysis\Block\Adminhtml\System\Config\Color</frontend_model>
+                    <depends>
+                        <field id="pagespeed/general/enable">1</field>
+                    </depends>
+                </field>
+                <field id="interactive" translate="label comment" type="text" sortOrder="1400" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Interactive line color</label>
+                    <frontend_model>Monogo\PagespeedAnalysis\Block\Adminhtml\System\Config\Color</frontend_model>
+                    <depends>
+                        <field id="pagespeed/general/enable">1</field>
+                    </depends>
+                </field>
+                <field id="first_cpu_idle" translate="label comment" type="text" sortOrder="1500" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>First CPU Idle line color</label>
                     <frontend_model>Monogo\PagespeedAnalysis\Block\Adminhtml\System\Config\Color</frontend_model>
                     <depends>
                         <field id="pagespeed/general/enable">1</field>

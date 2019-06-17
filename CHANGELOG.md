@@ -1,5 +1,25 @@
 # CHANGELOG
 
+<a name="1.0.6"></a>
+## 1.0.6 - 2019-06-17
+
+### Features
+New metrics
+- firstContentfulPaint
+- firstMeaningfulPaint
+- speedIndex
+- interactive
+- firstCPUIdle
+
+New configuration fields
+- Hide X values
+- Marker radius
+- Marker hover radius
+
+
+### Bug Fixes
+- Fix for adminhtml error in console
+
 <a name="1.0.5"></a>
 ## 1.0.5 - 2019-05-31
 

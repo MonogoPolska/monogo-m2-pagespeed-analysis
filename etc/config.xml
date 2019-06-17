@@ -21,6 +21,9 @@
             <chart>
                 <height>150</height>
                 <autoscale>0</autoscale>
+                <hide_x_values>0</hide_x_values>
+                <point_radius>0</point_radius>
+                <point_hover_radius>5</point_hover_radius>
                 <animations>0</animations>
                 <history>30</history>
                 <performance>#4268b3</performance>
@@ -29,6 +32,11 @@
                 <best_practices>#24a318</best_practices>
                 <accessibility>#f5d60c</accessibility>
                 <ttfb>#0c90f5</ttfb>
+                <first_contentful_paint>#f50c20</first_contentful_paint>
+                <first_meaningful_paint>#24a318</first_meaningful_paint>
+                <speed_index>#d46fd4</speed_index>
+                <interactive>#f2970e</interactive>
+                <first_cpu_idle>#f5d60c</first_cpu_idle>
             </chart>
         </pagespeed>
     </default>
