@@ -91,6 +91,19 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>If No selected, all charts will have the same min and max values</comment>
                 </field>
+                <field id="zoom" translate="label, comment" type="select" sortOrder="320" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable zoom</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable zoom (mouse scroll)</comment>
+                </field>
+                <field id="zoom_sensitivity" translate="label comment" type="text" sortOrder="325" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Zoom sensitivity</label>
+                    <validate>validate-digits</validate>
+                    <depends>
+                        <field id="pagespeed/general/enable">1</field>
+                        <field id="pagespeed/chart/zoom">1</field>
+                    </depends>
+                </field>
                 <field id="hide_x_values" translate="label, comment" type="select" sortOrder="350" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Hide X values</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>

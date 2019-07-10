@@ -16,69 +16,88 @@
 <?php
 $graphData = $this->getData('graph');
 ?>
+
 <script>
-    require(['https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js'], function (Chart) {
+
+    require.config({
+        paths: {
+            chartjs: "//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min",
+            hammerjs: "//cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min",
+            chartjszoom: "//cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.2/chartjs-plugin-zoom.min"
+        },
+        map: {
+            hammerjs: {
+                "chart.js": "chartjs"
+            },
+            chartjszoom: {
+                "chart.js": "chartjs"
+            }
+        }
+    });
+
+    require(['chartjs','hammerjs','chartjszoom'], function (Chart, Hammer, Zoom) {
 
         <?php foreach ($graphData as $key => $item): ?>
         <?php if(!empty($item)): ?>
         <?php foreach ($item as $strategy => $data): ?>
+
         var chartMain<?= str_replace('=', '', $key)?><?=  $strategy ?>
-            = new Chart(document.getElementById('main-<?=$strategy?>-<?=  str_replace('=', '', $key) ?>'), {
-            "type": "line",
-            "data": {
-                "labels": <?= json_encode($data['created_at']) ?>,
-                "datasets": [
+            = new  Chart(document.getElementById('main-<?=$strategy?>-<?=  str_replace('=', '', $key) ?>'), {
+            type: "line",
+            data: {
+                labels: <?= json_encode($data['created_at']) ?>,
+                datasets: [
                     {
-                        "label": "Performance",
-                        "data": <?= json_encode($data['performance']) ?>,
-                        "fill": false,
-                        "borderColor": "<?= $block->getPerformanceColor() ?>",
-                        "lineTension": 0.1,
-                        "pointRadius": <?= $block->getPointRadius() ?>,
-                        "pointHoverRadius":<?= $block->getPointHoverRadius() ?>,
+                        label: "Performance",
+                        data: <?= json_encode($data['performance']) ?>,
+                        fill: false,
+                        borderColor: "<?= $block->getPerformanceColor() ?>",
+                        lineTension: 0.1,
+                        pointRadius: <?= $block->getPointRadius() ?>,
+                        pointHoverRadius:<?= $block->getPointHoverRadius() ?>,
 
                     },
                     {
-                        "label": "SEO",
-                        "data": <?= json_encode($data['seo']) ?>,
-                        "fill": false,
-                        "borderColor": "<?= $block->getSeoColor() ?>",
-                        "lineTension": 0.1,
-                        "pointRadius": <?= $block->getPointRadius() ?>,
-                        "pointHoverRadius":<?= $block->getPointHoverRadius() ?>,
+                        label: "SEO",
+                        data: <?= json_encode($data['seo']) ?>,
+                        fill: false,
+                        borderColor: "<?= $block->getSeoColor() ?>",
+                        lineTension: 0.1,
+                        pointRadius: <?= $block->getPointRadius() ?>,
+                        pointHoverRadius:<?= $block->getPointHoverRadius() ?>,
                     },
                     {
-                        "label": "PWA",
-                        "data": <?= json_encode($data['pwa']) ?>,
-                        "fill": false,
-                        "borderColor": "<?= $block->getPwaColor() ?>",
-                        "lineTension": 0.1,
-                        "pointRadius": <?= $block->getPointRadius() ?>,
-                        "pointHoverRadius":<?= $block->getPointHoverRadius() ?>,
+                        label: "PWA",
+                        data: <?= json_encode($data['pwa']) ?>,
+                        fill: false,
+                        borderColor: "<?= $block->getPwaColor() ?>",
+                        lineTension: 0.1,
+                        pointRadius: <?= $block->getPointRadius() ?>,
+                        pointHoverRadius:<?= $block->getPointHoverRadius() ?>,
                     },
 
                     {
-                        "label": "Best Practices",
-                        "data": <?= json_encode($data['best_practices']) ?>,
-                        "fill": false,
-                        "borderColor": "<?= $block->getBestPracticesColor() ?>",
-                        "lineTension": 0.1,
-                        "pointRadius": <?= $block->getPointRadius() ?>,
-                        "pointHoverRadius":<?= $block->getPointHoverRadius() ?>,
+                        label: "Best Practices",
+                        data: <?= json_encode($data['best_practices']) ?>,
+                        fill: false,
+                        borderColor: "<?= $block->getBestPracticesColor() ?>",
+                        lineTension: 0.1,
+                        pointRadius: <?= $block->getPointRadius() ?>,
+                        pointHoverRadius:<?= $block->getPointHoverRadius() ?>,
                     },
                     {
-                        "label": "Accessibility",
-                        "data": <?= json_encode($data['accessibility']) ?>,
-                        "fill": false,
-                        "borderColor": "<?= $block->getAccessibilityColor() ?>",
-                        "lineTension": 0.1,
-                        "pointRadius": <?= $block->getPointRadius() ?>,
-                        "pointHoverRadius":<?= $block->getPointHoverRadius() ?>,
+                        label: "Accessibility",
+                        data: <?= json_encode($data['accessibility']) ?>,
+                        fill: false,
+                        borderColor: "<?= $block->getAccessibilityColor() ?>",
+                        lineTension: 0.1,
+                        pointRadius: <?= $block->getPointRadius() ?>,
+                        pointHoverRadius:<?= $block->getPointHoverRadius() ?>,
                     },
 
                 ]
             },
-            "options": {
+            options: {
                 <?php if(!$this->getEnableAnimations()): ?>
                 animation: {
                     duration: 0
@@ -93,6 +112,7 @@ $graphData = $this->getData('graph');
                     intersect: false,
                     mode: 'index'
                 },
+                responsive:true,
                 scales: {
                     yAxes: [{
                         ticks: {
@@ -107,78 +127,95 @@ $graphData = $this->getData('graph');
                     }],
                     xAxes: [{
                         ticks: {
-                            <?php if(!$this->getHideOxValues()): ?>
+                            <?php if($this->getHideOxValues()): ?>
                             display:false,
                             <?php endif; ?>
                         }
                     }]
 
+                },
+                plugins: {
+                    <?php if($this->getUseZoom()): ?>
+                    zoom: {
+                        pan: {
+                            enabled: true,
+                            mode: 'x' ,
+                            sensitivity: <?= $this->getZoomSensitivity() ?>
+
+                        },
+                        zoom: {
+                            enabled: true,
+                            mode: 'x',
+                            sensitivity: <?= $this->getZoomSensitivity() ?>
+                        }
+                    }
+                    <?php endif ?>
                 }
             }
         });
         var chartTtfb<?= str_replace('=', '', $key)?><?=  $strategy ?>
             = new Chart(document.getElementById('ttfb-<?=$strategy?>-<?=  str_replace('=', '', $key) ?>'), {
-            "type": "line",
-            "data": {
-                "labels": <?= json_encode($data['created_at']) ?>,
-                "datasets": [
+            type: "line",
+            data: {
+                labels: <?= json_encode($data['created_at']) ?>,
+                datasets: [
                     {
-                        "label": "TTFB",
-                        "data": <?= json_encode($data['ttfb']) ?>,
-                        "fill": false,
-                        "borderColor": "<?= $block->getTtfbColor() ?>",
-                        "lineTension": 0.1,
-                        "pointRadius": <?= $block->getPointRadius() ?>,
-                        "pointHoverRadius":<?= $block->getPointHoverRadius() ?>,
+                        label: "TTFB",
+                        data: <?= json_encode($data['ttfb']) ?>,
+                        fill: false,
+                        borderColor: "<?= $block->getTtfbColor() ?>",
+                        lineTension: 0.1,
+                        pointRadius: <?= $block->getPointRadius() ?>,
+                        pointHoverRadius:<?= $block->getPointHoverRadius() ?>,
                     },
                     {
-                        "label": "First Contentful Paint",
-                        "data": <?= json_encode($data['first_contentful_paint']) ?>,
-                        "fill": false,
-                        "borderColor": "<?= $block->getFirstContentfulPaintColor() ?>",
-                        "lineTension": 0.1,
-                        "pointRadius": <?= $block->getPointRadius() ?>,
-                        "pointHoverRadius":<?= $block->getPointHoverRadius() ?>,
+                        label: "First Contentful Paint",
+                        data: <?= json_encode($data['first_contentful_paint']) ?>,
+                        fill: false,
+                        borderColor: "<?= $block->getFirstContentfulPaintColor() ?>",
+                        lineTension: 0.1,
+                        pointRadius: <?= $block->getPointRadius() ?>,
+                        pointHoverRadius:<?= $block->getPointHoverRadius() ?>,
                     },
                     {
-                        "label": "First Meaningful Paint",
-                        "data": <?= json_encode($data['first_meaningful_paint']) ?>,
-                        "fill": false,
-                        "borderColor": "<?= $block->getFirstMeaningfulPaintColor() ?>",
-                        "lineTension": 0.1,
-                        "pointRadius": <?= $block->getPointRadius() ?>,
-                        "pointHoverRadius":<?= $block->getPointHoverRadius() ?>,
+                        label: "First Meaningful Paint",
+                        data: <?= json_encode($data['first_meaningful_paint']) ?>,
+                        fill: false,
+                        borderColor: "<?= $block->getFirstMeaningfulPaintColor() ?>",
+                        lineTension: 0.1,
+                        pointRadius: <?= $block->getPointRadius() ?>,
+                        pointHoverRadius:<?= $block->getPointHoverRadius() ?>,
                     },
                     {
-                        "label": "Speed Index",
-                        "data": <?= json_encode($data['speed_index']) ?>,
-                        "fill": false,
-                        "borderColor": "<?= $block->getSpeedIndexColor() ?>",
-                        "lineTension": 0.1,
-                        "pointRadius": <?= $block->getPointRadius() ?>,
-                        "pointHoverRadius":<?= $block->getPointHoverRadius() ?>,
+                        label: "Speed Index",
+                        data: <?= json_encode($data['speed_index']) ?>,
+                        fill: false,
+                        borderColor: "<?= $block->getSpeedIndexColor() ?>",
+                        lineTension: 0.1,
+                        pointRadius: <?= $block->getPointRadius() ?>,
+                        pointHoverRadius:<?= $block->getPointHoverRadius() ?>,
                     },
                     {
-                        "label": "Interactive",
-                        "data": <?= json_encode($data['interactive']) ?>,
-                        "fill": false,
-                        "borderColor": "<?= $block->getInteractiveColor() ?>",
-                        "lineTension": 0.1,
-                        "pointRadius": <?= $block->getPointRadius() ?>,
-                        "pointHoverRadius":<?= $block->getPointHoverRadius() ?>,
+                        label: "Interactive",
+                        data: <?= json_encode($data['interactive']) ?>,
+                        fill: false,
+                        borderColor: "<?= $block->getInteractiveColor() ?>",
+                        lineTension: 0.1,
+                        pointRadius: <?= $block->getPointRadius() ?>,
+                        pointHoverRadius:<?= $block->getPointHoverRadius() ?>,
                     },
                     {
-                        "label": "First CPU Idle",
-                        "data": <?= json_encode($data['first_cpu_idle']) ?>,
-                        "fill": false,
-                        "borderColor": "<?= $block->getFirstCpuIdleColor() ?>",
-                        "lineTension": 0.1,
-                        "pointRadius": <?= $block->getPointRadius() ?>,
-                        "pointHoverRadius":<?= $block->getPointHoverRadius() ?>,
+                        label: "First CPU Idle",
+                        data: <?= json_encode($data['first_cpu_idle']) ?>,
+                        fill: false,
+                        borderColor: "<?= $block->getFirstCpuIdleColor() ?>",
+                        lineTension: 0.1,
+                        pointRadius: <?= $block->getPointRadius() ?>,
+                        pointHoverRadius:<?= $block->getPointHoverRadius() ?>,
                     }
                 ]
             },
-            "options": {
+            options: {
                 <?php if(!$this->getEnableAnimations()): ?>
                 animation: {
                     duration: 0
@@ -207,11 +244,28 @@ $graphData = $this->getData('graph');
                     }],
                     xAxes: [{
                         ticks: {
-                            <?php if(!$this->getHideOxValues()): ?>
+                            <?php if($this->getHideOxValues()): ?>
                             display:false,
                             <?php endif; ?>
                         }
                     }]
+                },
+                plugins: {
+                    <?php if($this->getUseZoom()): ?>
+                    zoom: {
+                        pan: {
+                            enabled: true,
+                            mode: 'x' ,
+                            sensitivity: <?= $this->getZoomSensitivity() ?>
+
+                        },
+                        zoom: {
+                            enabled: true,
+                            mode: 'x',
+                            sensitivity: <?= $this->getZoomSensitivity() ?>
+                        }
+                    }
+                    <?php endif ?>
                 }
             }
         });

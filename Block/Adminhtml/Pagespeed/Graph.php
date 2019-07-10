@@ -121,14 +121,12 @@ class Graph extends Widget
             foreach ($collection as $item) {
                 $createdAt = date('d M Y H:i', strtotime($item->getCreatedAt()));
                 if ($item->getComment()) {
-                    $data[$item->getMode()]['created_at'][] = [
-                        $createdAt,
-                        $item->getComment(),
-                    ];
+                    $data[$item->getMode()]['created_at'][] =
+                        $createdAt . ' ' .
+                        $item->getComment();
                 } else {
-                    $data[$item->getMode()]['created_at'][] = [
-                        $createdAt,
-                    ];
+                    $data[$item->getMode()]['created_at'][] =
+                        $createdAt;
                 }
 
                 $data[$item->getMode()]['pwa'][] = $item->getPwaScore() * 100;
@@ -260,6 +258,26 @@ class Graph extends Widget
     public function getUseAutoScale()
     {
         return $this->config->getUseAutoScale();
+    }
+
+    /**
+     * Get Use Zoom
+     *
+     * @return int
+     */
+    public function getUseZoom()
+    {
+        return $this->config->getUseZoom();
+    }
+
+    /**
+     * Get Zoom Sensitivity
+     *
+     * @return int
+     */
+    public function getZoomSensitivity()
+    {
+        return $this->config->getZoomSensitivity();
     }
 
     /**

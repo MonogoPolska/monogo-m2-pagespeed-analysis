@@ -1,5 +1,11 @@
 # CHANGELOG
 
+<a name="1.0.7"></a>
+## 1.0.7 - 2019-07-10
+
+### Features
+Zoom in charts
+
 <a name="1.0.6"></a>
 ## 1.0.6 - 2019-06-17
 

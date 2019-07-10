@@ -21,6 +21,8 @@
             <chart>
                 <height>150</height>
                 <autoscale>0</autoscale>
+                <zoom>0</zoom>
+                <zoom_sensitivity>5</zoom_sensitivity>
                 <hide_x_values>0</hide_x_values>
                 <point_radius>0</point_radius>
                 <point_hover_radius>5</point_hover_radius>
