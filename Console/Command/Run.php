@@ -23,6 +23,8 @@ class Run extends Command
 
     protected $collectData;
 
+    protected $appState;
+
     /**
      * FrontendPing constructor.
      *
@@ -37,13 +39,9 @@ class Run extends Command
         Config $config,
         CollectData $collectData
     ) {
-        try {
-            $appState->setAreaCode(Area::AREA_GLOBAL);
-        } catch (\Exception $e) {
-        }
-
         $this->config = $config;
         $this->collectData = $collectData;
+        $this->appState = $appState;
 
         parent::__construct();
     }
@@ -71,6 +69,10 @@ class Run extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        try {
+            $this->appState->setAreaCode(Area::AREA_GLOBAL);
+        } catch (\Exception $e) {
+        }
         if ($this->config->getIsEnabled() && $this->config->getApiToken()) {
             $this->collectData->run();
         }
