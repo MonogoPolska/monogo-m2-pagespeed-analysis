@@ -1,5 +1,9 @@
 # CHANGELOG
 
+<a name="1.0.1"></a>
+## 1.1.0 - 2020-06-25
+Change time-to-first-byte to server-response-time 
+
 <a name="1.0.7"></a>
 ## 1.0.7 - 2019-07-10
 

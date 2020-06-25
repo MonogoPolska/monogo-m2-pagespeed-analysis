@@ -206,11 +206,11 @@ class CollectData
             $this->logger->log('Empty audits');
             return false;
         }
-        if (!key_exists('time-to-first-byte', $responseArray['lighthouseResult']['audits'])) {
-            $this->logger->log('Empty time-to-first-byte');
+        if (!key_exists('server-response-time', $responseArray['lighthouseResult']['audits'])) {
+            $this->logger->log('Empty server-response-time');
             return false;
         }
-        if (!key_exists('displayValue', $responseArray['lighthouseResult']['audits']['time-to-first-byte'])) {
+        if (!key_exists('displayValue', $responseArray['lighthouseResult']['audits']['server-response-time'])) {
             $this->logger->log('Empty displayValue');
             return false;
         }
@@ -296,7 +296,7 @@ class CollectData
      */
     protected function prepareTtfb($responseArray)
     {
-        $string = $responseArray['lighthouseResult']['audits']['time-to-first-byte']['displayValue'];
+        $string = $responseArray['lighthouseResult']['audits']['server-response-time']['displayValue'];
         $string = str_replace(',', '', $string);
         $string = str_replace('.', '', $string);
         $value = (int)filter_var($string, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);

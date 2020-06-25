@@ -9,7 +9,7 @@
         "symfony/console": "*"
     },
     "type": "magento2-module",
-    "version": "1.0.9",
+    "version": "1.1.0",
     "license": "MIT",
     "keywords": ["Magento 2", "pagespeed", "insights"],
     "authors": [
