@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Monogo\PagespeedAnalysis\Cron;
 
 use Monogo\PagespeedAnalysis\Helper\Config;

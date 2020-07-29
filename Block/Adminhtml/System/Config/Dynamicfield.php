@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Monogo\PagespeedAnalysis\Block\Adminhtml\System\Config;
 
 use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
@@ -23,7 +25,7 @@ class Dynamicfield extends AbstractFieldArray
      *
      * @return \Magento\Framework\View\Element\Html\Select
      */
-    protected function getYesNoRenderer()
+    protected function getYesNoRenderer(): \Magento\Framework\View\Element\Html\Select
     {
         if (!$this->yesnoRenderer) {
             try {
@@ -42,7 +44,7 @@ class Dynamicfield extends AbstractFieldArray
     /**
      * {@inheritDoc}
      */
-    protected function _prepareToRender()
+    protected function _prepareToRender(): void
     {
         $this->addColumn(
             'col_1',
@@ -67,7 +69,7 @@ class Dynamicfield extends AbstractFieldArray
     /**
      * {@inheritDoc}
      */
-    protected function _prepareArrayRow(\Magento\Framework\DataObject $row)
+    protected function _prepareArrayRow(\Magento\Framework\DataObject $row): void
     {
         $optionExtraAttr = [];
         $optionExtraAttr['option_' . $this->getYesNoRenderer()->calcOptionHash($row->getData('col_2'))] =

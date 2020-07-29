@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Monogo\PagespeedAnalysis\Model;
 
 use Magento\Framework\DataObject\IdentityInterface;
@@ -54,19 +56,19 @@ class Pagespeed extends AbstractModel implements IdentityInterface
     /**
      * @var string
      */
-    protected $_cacheTag = 'monogo_pagespeed';
+    protected $_cacheTag = self::CACHE_TAG;
 
     /**
      * @var string
      */
-    protected $_eventPrefix = 'monogo_pagespeed';
+    protected $_eventPrefix = self::CACHE_TAG;
 
     /**
      * Init
      */
     protected function _construct()
     {
-        $this->_init('Monogo\PagespeedAnalysis\Model\ResourceModel\Pagespeed');
+        $this->_init(\Monogo\PagespeedAnalysis\Model\ResourceModel\Pagespeed::class);
     }
 
     /**
@@ -86,8 +88,6 @@ class Pagespeed extends AbstractModel implements IdentityInterface
      */
     public function getDefaultValues()
     {
-        $values = [];
-
-        return $values;
+        return [];
     }
 }

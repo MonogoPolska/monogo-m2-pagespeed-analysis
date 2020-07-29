@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Monogo\PagespeedAnalysis\Block\Adminhtml\Pagespeed;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget;
+use Monogo\PagespeedAnalysis\Api\Data\ConfigInterface;
 use Monogo\PagespeedAnalysis\Helper\Config;
 use Monogo\PagespeedAnalysis\Model\ResourceModel\Pagespeed\CollectionFactory;
 use Monogo\PagespeedAnalysis\Ui\Component\Listing\Column\Score;
@@ -79,7 +82,7 @@ class Graph extends Widget
      *
      * @return string
      */
-    public function getFilterDate()
+    public function getFilterDate(): string
     {
         if ($this->date === null) {
             $this->date = date('Y-m-d', strtotime('-' . $this->config->getChartHistory() . ' day'));
@@ -92,15 +95,15 @@ class Graph extends Widget
      *
      * @param string $endpoint Endpoint
      *
-     * @return mixed
+     * @return \Monogo\PagespeedAnalysis\Model\ResourceModel\Pagespeed
      */
-    public function getCollection($endpoint)
+    public function getCollection(string $endpoint): \Monogo\PagespeedAnalysis\Model\ResourceModel\Pagespeed\Collection
     {
         if (!key_exists(md5($endpoint), $this->collection) || empty($this->collection[md5($endpoint)])) {
             $collection = $this->collectionFactory->create();
             $collection->addFieldToFilter('url', $endpoint);
-            $collection->addFieldToFilter('created_at', ['gt' => $this->getFilterDate()]);
-            $collection->setOrder('created_at', 'asc');
+            $collection->addFieldToFilter(ConfigInterface::CREATED_AT, ['gt' => $this->getFilterDate()]);
+            $collection->setOrder(ConfigInterface::CREATED_AT, 'asc');
             $collection->setOrder('mode', 'asc');
             $this->collection[md5($endpoint)] = $collection;
         }
@@ -112,7 +115,7 @@ class Graph extends Widget
      *
      * @return array
      */
-    public function getChartData()
+    public function getChartData(): array
     {
         $chartData = [];
         foreach ($this->config->getEndpoints() as $endpoint) {
@@ -121,11 +124,11 @@ class Graph extends Widget
             foreach ($collection as $item) {
                 $createdAt = date('d M Y H:i', strtotime($item->getCreatedAt()));
                 if ($item->getComment()) {
-                    $data[$item->getMode()]['created_at'][] =
+                    $data[$item->getMode()][ConfigInterface::CREATED_AT][] =
                         $createdAt . ' ' .
                         $item->getComment();
                 } else {
-                    $data[$item->getMode()]['created_at'][] =
+                    $data[$item->getMode()][ConfigInterface::CREATED_AT][] =
                         $createdAt;
                 }
 
@@ -150,24 +153,23 @@ class Graph extends Widget
     /**
      * Get Endpoint's last record
      *
-     * @param string $endpoint Endpoint
+     * @param string $endpoint
+     * @param string $mode
      *
-     * @return mixed
+     * @return \Monogo\PagespeedAnalysis\Model\Pagespeed
      */
-    public function getLastRecord($endpoint, $mode)
+    public function getLastRecord(string $endpoint, string $mode): \Monogo\PagespeedAnalysis\Model\Pagespeed
     {
         /**
          * @var \Monogo\PagespeedAnalysis\Model\ResourceModel\Pagespeed\Collection $collection
          */
         $collection = clone $this->getCollection($endpoint);
         $collection->getSelect()->reset(\Magento\Framework\DB\Select::ORDER);
-        $collection->setOrder('created_at', 'desc');
+        $collection->setOrder(ConfigInterface::CREATED_AT, 'desc');
         $collection->clear();
         foreach ($collection as $item) {
             if ($item->getMode() == $mode) {
                 return $item;
-            } else {
-                continue;
             }
         }
     }
@@ -175,11 +177,11 @@ class Graph extends Widget
     /**
      * Get Max Value
      *
-     * @param $strategy
+     * @param string $strategy
      *
-     * @return float|int
+     * @return float
      */
-    public function getMaxValue($strategy)
+    public function getMaxValue(string $strategy): float
     {
         if (!key_exists($strategy, $this->maxTimeValue)) {
             /**
@@ -194,7 +196,7 @@ class Graph extends Widget
                 'interactive',
                 'first_cpu_idle',
             ]);
-            $collection->addFieldToFilter('created_at', ['gt' => $this->getFilterDate()]);
+            $collection->addFieldToFilter(ConfigInterface::CREATED_AT, ['gt' => $this->getFilterDate()]);
             $collection->addFieldToFilter('mode', $strategy);
             $maxValue = 0;
             foreach ($collection->getItems() as $item) {
@@ -210,7 +212,7 @@ class Graph extends Widget
 
             $this->maxTimeValue[$strategy] = ceil($maxValue / 100) * 100;
         }
-        return $this->maxTimeValue[$strategy];
+        return (float)$this->maxTimeValue[$strategy];
     }
 
     /**
@@ -220,22 +222,21 @@ class Graph extends Widget
      *
      * @return string
      */
-    public function getFilenameFromKey($key)
+    public function getFilenameFromKey(string $key): string
     {
         $urlFilename = base64_decode($key);
         $urlFilename = str_replace('https://', '', $urlFilename);
         $urlFilename = str_replace('/', '_', $urlFilename);
         $urlFilename = str_replace('&', '_', $urlFilename);
-        $urlFilename = str_replace('?', '_', $urlFilename);
-        return $urlFilename;
+        return str_replace('?', '_', $urlFilename);
     }
 
     /**
      * Get Chart Height
      *
-     * @return string
+     * @return int
      */
-    public function getChartHeight()
+    public function getChartHeight(): int
     {
         return $this->config->getChartHeight();
     }
@@ -245,7 +246,7 @@ class Graph extends Widget
      *
      * @return int
      */
-    public function getEnableAnimations()
+    public function getEnableAnimations(): int
     {
         return $this->config->getEnableAnimations();
     }
@@ -255,7 +256,7 @@ class Graph extends Widget
      *
      * @return int
      */
-    public function getUseAutoScale()
+    public function getUseAutoScale(): int
     {
         return $this->config->getUseAutoScale();
     }
@@ -265,7 +266,7 @@ class Graph extends Widget
      *
      * @return int
      */
-    public function getUseZoom()
+    public function getUseZoom(): int
     {
         return $this->config->getUseZoom();
     }
@@ -275,7 +276,7 @@ class Graph extends Widget
      *
      * @return int
      */
-    public function getZoomSensitivity()
+    public function getZoomSensitivity(): int
     {
         return $this->config->getZoomSensitivity();
     }
@@ -285,7 +286,7 @@ class Graph extends Widget
      *
      * @return string
      */
-    public function getSeoColor()
+    public function getSeoColor(): string
     {
         return $this->config->getChartSeoColor();
     }
@@ -295,7 +296,7 @@ class Graph extends Widget
      *
      * @return string
      */
-    public function getPwaColor()
+    public function getPwaColor(): string
     {
         return $this->config->getChartPwaColor();
     }
@@ -305,7 +306,7 @@ class Graph extends Widget
      *
      * @return string
      */
-    public function getPerformanceColor()
+    public function getPerformanceColor(): string
     {
         return $this->config->getChartPerformanceColor();
     }
@@ -315,7 +316,7 @@ class Graph extends Widget
      *
      * @return string
      */
-    public function getAccessibilityColor()
+    public function getAccessibilityColor(): string
     {
         return $this->config->getChartAccessibilityColor();
     }
@@ -325,7 +326,7 @@ class Graph extends Widget
      *
      * @return string
      */
-    public function getBestPracticesColor()
+    public function getBestPracticesColor(): string
     {
         return $this->config->getChartBestPracticesColor();
     }
@@ -335,7 +336,7 @@ class Graph extends Widget
      *
      * @return string
      */
-    public function getTtfbColor()
+    public function getTtfbColor(): string
     {
         return $this->config->getChartTtfbColor();
     }
@@ -345,7 +346,7 @@ class Graph extends Widget
      *
      * @return string
      */
-    public function getFirstMeaningfulPaintColor()
+    public function getFirstMeaningfulPaintColor(): string
     {
         return $this->config->getChartFirstMeaningfulPaintColor();
     }
@@ -355,7 +356,7 @@ class Graph extends Widget
      *
      * @return string
      */
-    public function getFirstContentfulPaintColor()
+    public function getFirstContentfulPaintColor(): string
     {
         return $this->config->getChartFirstContentfulPaintColor();
     }
@@ -365,7 +366,7 @@ class Graph extends Widget
      *
      * @return string
      */
-    public function getInteractiveColor()
+    public function getInteractiveColor(): string
     {
         return $this->config->getChartInteractiveColor();
     }
@@ -375,7 +376,7 @@ class Graph extends Widget
      *
      * @return string
      */
-    public function getSpeedIndexColor()
+    public function getSpeedIndexColor(): string
     {
         return $this->config->getChartSpeedIndexColor();
     }
@@ -385,7 +386,7 @@ class Graph extends Widget
      *
      * @return string
      */
-    public function getFirstCpuIdleColor()
+    public function getFirstCpuIdleColor(): string
     {
         return $this->config->getChartFirstCpuIdleColor();
     }
@@ -397,7 +398,7 @@ class Graph extends Widget
      *
      * @return string
      */
-    public function getScoreColor($value)
+    public function getScoreColor(string $value): string
     {
         return $this->score->getScoreColor($value * 100);
     }
@@ -407,7 +408,7 @@ class Graph extends Widget
      *
      * @return int
      */
-    public function getChartHistory()
+    public function getChartHistory(): int
     {
         return $this->config->getChartHistory();
     }
@@ -417,7 +418,7 @@ class Graph extends Widget
      *
      * @return int
      */
-    public function getHideOxValues()
+    public function getHideOxValues(): int
     {
         return $this->config->getHideOxValues();
     }
@@ -427,7 +428,7 @@ class Graph extends Widget
      *
      * @return int
      */
-    public function getPointRadius()
+    public function getPointRadius(): int
     {
         return $this->config->getPointRadius();
     }
@@ -437,7 +438,7 @@ class Graph extends Widget
      *
      * @return int
      */
-    public function getPointHoverRadius()
+    public function getPointHoverRadius(): int
     {
         return $this->config->getPointHoverRadius();
     }

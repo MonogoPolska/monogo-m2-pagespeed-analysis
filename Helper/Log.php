@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Monogo\PagespeedAnalysis\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -45,9 +47,9 @@ class Log extends AbstractHelper
     /**
      * Get logger
      *
-     * @return null|Logger
+     * @return Logger
      */
-    protected function getLogger()
+    protected function getLogger() :Logger
     {
         return $this->logger;
     }
@@ -59,7 +61,7 @@ class Log extends AbstractHelper
      *
      * @return void
      */
-    public function log($message)
+    public function log($message) :void
     {
         $enabled
             = $this->config->getEnableLog();

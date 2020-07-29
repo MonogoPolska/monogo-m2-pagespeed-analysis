@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Monogo\PagespeedAnalysis\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -82,9 +84,9 @@ class Config extends AbstractHelper
      *
      * @return mixed
      */
-    public function getConfig($config_path)
+    public function getConfig($config_path): string
     {
-        return $this->scopeConfig->getValue(
+        return (string)$this->scopeConfig->getValue(
             $config_path,
             ScopeInterface::SCOPE_STORE
         );
@@ -95,9 +97,9 @@ class Config extends AbstractHelper
      *
      * @return int
      */
-    public function getIsEnabled()
+    public function getIsEnabled(): int
     {
-        return $this->getConfig(self::CONFIG_PATH . self::ENABLED);
+        return (int)$this->getConfig(self::CONFIG_PATH . self::ENABLED);
     }
 
     /**
@@ -105,7 +107,7 @@ class Config extends AbstractHelper
      *
      * @return string
      */
-    public function getApiToken()
+    public function getApiToken(): string
     {
         return $this->getConfig(self::CONFIG_PATH . self::API_TOKEN);
     }
@@ -115,7 +117,7 @@ class Config extends AbstractHelper
      *
      * @return array
      */
-    public function getStrategy()
+    public function getStrategy(): array
     {
         return explode(',', $this->getConfig(self::CONFIG_PATH . self::STRATEGY));
     }
@@ -125,9 +127,9 @@ class Config extends AbstractHelper
      *
      * @return int
      */
-    public function getUseCron()
+    public function getUseCron(): int
     {
-        return $this->getConfig(self::CONFIG_PATH . self::USE_CRON);
+        return (int)$this->getConfig(self::CONFIG_PATH . self::USE_CRON);
     }
 
     /**
@@ -135,7 +137,7 @@ class Config extends AbstractHelper
      *
      * @return string
      */
-    public function getCronExpr()
+    public function getCronExpr(): string
     {
         return $this->getConfig(self::CONFIG_PATH . self::CRON_EXPR);
     }
@@ -145,7 +147,7 @@ class Config extends AbstractHelper
      *
      * @return array
      */
-    public function getEndpoints()
+    public function getEndpoints(): array
     {
         if (empty($this->endpointList)) {
             $endpointConfig = json_decode($this->getConfig(self::CONFIG_PATH . self::ENDPOINTS_LIST), true);
@@ -168,9 +170,9 @@ class Config extends AbstractHelper
      *
      * @return int
      */
-    public function getChartHeight()
+    public function getChartHeight(): int
     {
-        return $this->getConfig(self::CONFIG_PATH . self::CHART_HEIGHT);
+        return (int)$this->getConfig(self::CONFIG_PATH . self::CHART_HEIGHT);
     }
 
     /**
@@ -178,9 +180,9 @@ class Config extends AbstractHelper
      *
      * @return int
      */
-    public function getEnableAnimations()
+    public function getEnableAnimations(): int
     {
-        return $this->getConfig(self::CONFIG_PATH . self::CHART_ANIMATIONS);
+        return (int)$this->getConfig(self::CONFIG_PATH . self::CHART_ANIMATIONS);
     }
 
     /**
@@ -188,9 +190,9 @@ class Config extends AbstractHelper
      *
      * @return int
      */
-    public function getUseAutoScale()
+    public function getUseAutoScale(): int
     {
-        return $this->getConfig(self::CONFIG_PATH . self::CHART_AUTOSCALE);
+        return (int)$this->getConfig(self::CONFIG_PATH . self::CHART_AUTOSCALE);
     }
 
     /**
@@ -198,9 +200,9 @@ class Config extends AbstractHelper
      *
      * @return int
      */
-    public function getUseZoom()
+    public function getUseZoom(): int
     {
-        return $this->getConfig(self::CONFIG_PATH . self::CHART_ZOOM);
+        return (int)$this->getConfig(self::CONFIG_PATH . self::CHART_ZOOM);
     }
 
     /**
@@ -208,9 +210,9 @@ class Config extends AbstractHelper
      *
      * @return int
      */
-    public function getZoomSensitivity()
+    public function getZoomSensitivity(): int
     {
-        return $this->getConfig(self::CONFIG_PATH . self::CHART_ZOOM_SENSITIVITY);
+        return (int)$this->getConfig(self::CONFIG_PATH . self::CHART_ZOOM_SENSITIVITY);
     }
 
     /**
@@ -218,9 +220,9 @@ class Config extends AbstractHelper
      *
      * @return int
      */
-    public function getChartHistory()
+    public function getChartHistory(): int
     {
-        return $this->getConfig(self::CONFIG_PATH . self::CHART_HISTORY);
+        return (int)$this->getConfig(self::CONFIG_PATH . self::CHART_HISTORY);
     }
 
     /**
@@ -228,7 +230,7 @@ class Config extends AbstractHelper
      *
      * @return string
      */
-    public function getChartPerformanceColor()
+    public function getChartPerformanceColor(): string
     {
         return $this->getConfig(self::CONFIG_PATH . self::CHART_PERFORMANCE_COLOR);
     }
@@ -238,7 +240,7 @@ class Config extends AbstractHelper
      *
      * @return string
      */
-    public function getChartSeoColor()
+    public function getChartSeoColor(): string
     {
         return $this->getConfig(self::CONFIG_PATH . self::CHART_SEO_COLOR);
     }
@@ -248,7 +250,7 @@ class Config extends AbstractHelper
      *
      * @return string
      */
-    public function getChartPwaColor()
+    public function getChartPwaColor(): string
     {
         return $this->getConfig(self::CONFIG_PATH . self::CHART_PWA_COLOR);
     }
@@ -258,7 +260,7 @@ class Config extends AbstractHelper
      *
      * @return string
      */
-    public function getChartBestPracticesColor()
+    public function getChartBestPracticesColor(): string
     {
         return $this->getConfig(self::CONFIG_PATH . self::CHART_BEST_PRACTICES_COLOR);
     }
@@ -268,7 +270,7 @@ class Config extends AbstractHelper
      *
      * @return string
      */
-    public function getChartAccessibilityColor()
+    public function getChartAccessibilityColor(): string
     {
         return $this->getConfig(self::CONFIG_PATH . self::CHART_ACCESSIBILITY_COLOR);
     }
@@ -278,7 +280,7 @@ class Config extends AbstractHelper
      *
      * @return string
      */
-    public function getChartTtfbColor()
+    public function getChartTtfbColor(): string
     {
         return $this->getConfig(self::CONFIG_PATH . self::CHART_TTFB_COLOR);
     }
@@ -288,7 +290,7 @@ class Config extends AbstractHelper
      *
      * @return string
      */
-    public function getChartFirstContentfulPaintColor()
+    public function getChartFirstContentfulPaintColor(): string
     {
         return $this->getConfig(self::CONFIG_PATH . self::CHART_FIRST_CONTENTFUL_PAINT_COLOR);
     }
@@ -298,7 +300,7 @@ class Config extends AbstractHelper
      *
      * @return string
      */
-    public function getChartFirstMeaningfulPaintColor()
+    public function getChartFirstMeaningfulPaintColor(): string
     {
         return $this->getConfig(self::CONFIG_PATH . self::CHART_FIRST_MEANINGFUL_PAINT_COLOR);
     }
@@ -308,7 +310,7 @@ class Config extends AbstractHelper
      *
      * @return string
      */
-    public function getChartSpeedIndexColor()
+    public function getChartSpeedIndexColor(): string
     {
         return $this->getConfig(self::CONFIG_PATH . self::CHART_SPEED_INDEX_COLOR);
     }
@@ -318,7 +320,7 @@ class Config extends AbstractHelper
      *
      * @return string
      */
-    public function getChartInteractiveColor()
+    public function getChartInteractiveColor(): string
     {
         return $this->getConfig(self::CONFIG_PATH . self::CHART_INTERACTIVE_COLOR);
     }
@@ -328,7 +330,7 @@ class Config extends AbstractHelper
      *
      * @return string
      */
-    public function getChartFirstCpuIdleColor()
+    public function getChartFirstCpuIdleColor(): string
     {
         return $this->getConfig(self::CONFIG_PATH . self::CHART_FIRST_CPU_IDLE_COLOR);
     }
@@ -338,9 +340,9 @@ class Config extends AbstractHelper
      *
      * @return int
      */
-    public function getHideOxValues()
+    public function getHideOxValues(): int
     {
-        return $this->getConfig(self::CONFIG_PATH . self::CHART_HIDE_X_VALUES);
+        return (int)$this->getConfig(self::CONFIG_PATH . self::CHART_HIDE_X_VALUES);
     }
 
     /**
@@ -348,9 +350,9 @@ class Config extends AbstractHelper
      *
      * @return int
      */
-    public function getPointRadius()
+    public function getPointRadius(): int
     {
-        return $this->getConfig(self::CONFIG_PATH . self::CHART_POINT_RADIUS);
+        return (int)$this->getConfig(self::CONFIG_PATH . self::CHART_POINT_RADIUS);
     }
 
     /**
@@ -358,9 +360,9 @@ class Config extends AbstractHelper
      *
      * @return int
      */
-    public function getPointHoverRadius()
+    public function getPointHoverRadius(): int
     {
-        return $this->getConfig(self::CONFIG_PATH . self::CHART_POINT_HOVER_RADIUS);
+        return (int)$this->getConfig(self::CONFIG_PATH . self::CHART_POINT_HOVER_RADIUS);
     }
 
     /**
@@ -368,8 +370,8 @@ class Config extends AbstractHelper
      *
      * @return int
      */
-    public function getEnableLog()
+    public function getEnableLog(): int
     {
-        return $this->getConfig(self::CONFIG_PATH . self::ENABLE_LOG);
+        return (int)$this->getConfig(self::CONFIG_PATH . self::ENABLE_LOG);
     }
 }

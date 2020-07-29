@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Monogo\PagespeedAnalysis\Console\Command;
 
 use Magento\Framework\App\Area;
@@ -19,10 +21,19 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class Run extends Command
 {
+    /**
+     * @var Config
+     */
     protected $config;
 
+    /**
+     * @var CollectData
+     */
     protected $collectData;
 
+    /**
+     * @var State
+     */
     protected $appState;
 
     /**
@@ -51,7 +62,7 @@ class Run extends Command
      *
      * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('monogo:pagespeed:run')
             ->setDescription('Collect data for PageSpeed');
@@ -67,7 +78,7 @@ class Run extends Command
      * @return void
      * @throws \Exception
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         try {
             $this->appState->setAreaCode(Area::AREA_GLOBAL);

@@ -14,7 +14,7 @@
 ?>
 
 <?php
-$graphData = $this->getData('graph');
+$graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::GRAPH);
 ?>
 
 <script>
@@ -141,7 +141,6 @@ $graphData = $this->getData('graph');
                             enabled: true,
                             mode: 'x' ,
                             sensitivity: <?= $this->getZoomSensitivity() ?>
-
                         },
                         zoom: {
                             enabled: true,

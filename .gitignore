@@ -10,3 +10,5 @@ auth.json
 .php_cs.cache
 .php_cs.dist
 grumphp.yml
+sonar-scanner.sh
+.scannerwork

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Monogo\PagespeedAnalysis\Model;
 
 use Monogo\PagespeedAnalysis\Helper\Log;
@@ -39,7 +41,7 @@ class Api
      *
      * @return string
      */
-    public function getApiResponse($key, $url, $strategy)
+    public function getApiResponse(string $key, string $url, string $strategy): ?string
     {
         try {
             $ch = curl_init($this->prepareUrl($key, $url, $strategy));
@@ -68,7 +70,7 @@ class Api
      *
      * @return string
      */
-    protected function prepareUrl($key, $url, $strategy)
+    protected function prepareUrl(string $key, string $url, string $strategy): string
     {
         return self::API_URL .
             '?url=' . $url .

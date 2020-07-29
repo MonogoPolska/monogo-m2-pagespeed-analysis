@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Monogo\PagespeedAnalysis\Model;
 
 use Magento\Framework\DB\TransactionFactory;
+use Monogo\PagespeedAnalysis\Api\Data\ConfigInterface;
 use Monogo\PagespeedAnalysis\Helper\Config;
 use Monogo\PagespeedAnalysis\Helper\Log;
 
@@ -13,7 +16,7 @@ use Monogo\PagespeedAnalysis\Helper\Log;
  * @package  Monogo|PagespeedAnalysis
  * @author   Paweł Detka <pawel.detka@monogo.pl>
  */
-class CollectData
+class CollectData implements ConfigInterface
 {
     /**
      * @var Config
@@ -44,11 +47,11 @@ class CollectData
      * @var array
      */
     protected $categories = [
-        'performance',
-        'accessibility',
-        'best-practices',
-        'seo',
-        'pwa',
+        self::PERFORMANCE,
+        self::ACCESSIBILITY,
+        self::BEST_PRACTICES,
+        self::SEO,
+        self::PWA,
     ];
 
     /**
@@ -89,7 +92,7 @@ class CollectData
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         if ($this->config->getIsEnabled()
             && !empty($this->config->getEndpoints())
@@ -104,7 +107,7 @@ class CollectData
      *
      * @return void
      */
-    protected function collect()
+    protected function collect(): void
     {
         foreach ($this->config->getEndpoints() as $endpoint) {
             foreach ($this->config->getStrategy() as $strategy) {
@@ -129,8 +132,10 @@ class CollectData
      *
      * @param string $response API response
      * @param string $endpoint Endpoint
+     *
+     * @return void
      */
-    protected function prepareObject($response, $endpoint)
+    protected function prepareObject(string $response, string $endpoint): void
     {
         $objectToSave = $this->pagespeedFactory->create();
         $responseArray = json_decode($response, true);
@@ -139,19 +144,19 @@ class CollectData
             return;
         }
 
-        $objectToSave->setMode($responseArray['lighthouseResult']['configSettings']['emulatedFormFactor']);
+        $objectToSave->setMode($responseArray[self::LIGHTHOUSE_RESULT][self::CONFIG_SETTINGS][self::EMULATED_FACTOR]);
         $objectToSave->setUrl($endpoint);
         $objectToSave->setOverallCategory($this->prepareOverallCategory($responseArray));
-        $objectToSave->setPerformanceScore($responseArray['lighthouseResult']['categories']['performance']['score']);
-        $objectToSave->setAccessibilityScore($responseArray['lighthouseResult']['categories']['accessibility']['score']);
-        $objectToSave->setBestPracticesScore($responseArray['lighthouseResult']['categories']['best-practices']['score']);
-        $objectToSave->setSeoScore($responseArray['lighthouseResult']['categories']['seo']['score']);
-        $objectToSave->setPwaScore($responseArray['lighthouseResult']['categories']['pwa']['score']);
-        $objectToSave->setFirstContentfulPaint($responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0]['firstContentfulPaint']);
-        $objectToSave->setFirstMeaningfulPaint($responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0]['firstMeaningfulPaint']);
-        $objectToSave->setSpeedIndex($responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0]['speedIndex']);
-        $objectToSave->setInteractive($responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0]['interactive']);
-        $objectToSave->setFirstCpuIdle($responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0]['firstCPUIdle']);
+        $objectToSave->setPerformanceScore($responseArray[self::LIGHTHOUSE_RESULT][self::CATEGORIES][self::PERFORMANCE][self::SCORE]);
+        $objectToSave->setAccessibilityScore($responseArray[self::LIGHTHOUSE_RESULT][self::CATEGORIES][self::ACCESSIBILITY][self::SCORE]);
+        $objectToSave->setBestPracticesScore($responseArray[self::LIGHTHOUSE_RESULT][self::CATEGORIES][self::BEST_PRACTICES][self::SCORE]);
+        $objectToSave->setSeoScore($responseArray[self::LIGHTHOUSE_RESULT][self::CATEGORIES][self::SEO][self::SCORE]);
+        $objectToSave->setPwaScore($responseArray[self::LIGHTHOUSE_RESULT][self::CATEGORIES][self::PWA][self::SCORE]);
+        $objectToSave->setFirstContentfulPaint($responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::METRICS][self::DETAILS][self::ITEMS][0][self::FCP]);
+        $objectToSave->setFirstMeaningfulPaint($responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::METRICS][self::DETAILS][self::ITEMS][0][self::FMP]);
+        $objectToSave->setSpeedIndex($responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::METRICS][self::DETAILS][self::ITEMS][0][self::SPEED_INDEX]);
+        $objectToSave->setInteractive($responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::METRICS][self::DETAILS][self::ITEMS][0][self::INTERACTIVE]);
+        $objectToSave->setFirstCpuIdle($responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::METRICS][self::DETAILS][self::ITEMS][0][self::FCI]);
         $objectToSave->setTtfb($this->prepareTtfb($responseArray));
         $objectToSave->setRenderBlockingResources(json_encode($this->prepareRenderBlockingResources($responseArray)));
         $objectToSave->setNetworkRequests(json_encode($this->prepareNetworkRequests($responseArray)));
@@ -165,105 +170,105 @@ class CollectData
      *
      * @return bool
      */
-    protected function validateResponse($responseArray)
+    protected function validateResponse(array $responseArray): bool
     {
         if (empty($responseArray)) {
             $this->logger->log('Empty Response');
             return false;
         }
-        if (!key_exists('loadingExperience', $responseArray)) {
+        if (!key_exists(self::LOADING_EXP, $responseArray)) {
             $this->logger->log('Empty loadingExperience');
             return false;
         }
-        if (!key_exists('lighthouseResult', $responseArray)) {
+        if (!key_exists(self::LIGHTHOUSE_RESULT, $responseArray)) {
             $this->logger->log('Empty lighthouseResult');
             return false;
         }
-        if (!key_exists('configSettings', $responseArray['lighthouseResult'])) {
+        if (!key_exists(self::CONFIG_SETTINGS, $responseArray[self::LIGHTHOUSE_RESULT])) {
             $this->logger->log('Empty configSettings');
             return false;
         }
-        if (!key_exists('emulatedFormFactor', $responseArray['lighthouseResult']['configSettings'])) {
+        if (!key_exists(self::EMULATED_FACTOR, $responseArray[self::LIGHTHOUSE_RESULT][self::CONFIG_SETTINGS])) {
             $this->logger->log('Empty emulatedFormFactor');
             return false;
         }
-        if (!key_exists('categories', $responseArray['lighthouseResult'])) {
+        if (!key_exists(self::CATEGORIES, $responseArray[self::LIGHTHOUSE_RESULT])) {
             $this->logger->log('Empty categories');
             return false;
         }
-        foreach ($responseArray['lighthouseResult']['categories'] as $category => $result) {
+        foreach ($responseArray[self::LIGHTHOUSE_RESULT][self::CATEGORIES] as $category => $result) {
             if (!in_array($category, $this->categories)) {
                 $this->logger->log('Missing categories');
                 return false;
             }
 
-            if (!key_exists('score', $result)) {
+            if (!key_exists(self::SCORE, $result)) {
                 $this->logger->log('Empty score');
                 return false;
             }
         }
-        if (!key_exists('audits', $responseArray['lighthouseResult'])) {
+        if (!key_exists(self::AUDITS, $responseArray[self::LIGHTHOUSE_RESULT])) {
             $this->logger->log('Empty audits');
             return false;
         }
-        if (!key_exists('server-response-time', $responseArray['lighthouseResult']['audits'])) {
+        if (!key_exists(self::SRT, $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS])) {
             $this->logger->log('Empty server-response-time');
             return false;
         }
-        if (!key_exists('displayValue', $responseArray['lighthouseResult']['audits']['server-response-time'])) {
+        if (!key_exists(self::DISPLAY_VALUE, $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::SRT])) {
             $this->logger->log('Empty displayValue');
             return false;
         }
 
-        if (!key_exists('metrics', $responseArray['lighthouseResult']['audits'])) {
+        if (!key_exists(self::METRICS, $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS])) {
             $this->logger->log('Empty metrics');
             return false;
         }
 
-        if (!key_exists('details', $responseArray['lighthouseResult']['audits']['metrics'])) {
+        if (!key_exists(self::DETAILS, $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::METRICS])) {
             $this->logger->log('Empty metrics details');
             return false;
         }
 
-        if (!key_exists('items', $responseArray['lighthouseResult']['audits']['metrics']['details'])) {
+        if (!key_exists(self::ITEMS, $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::METRICS][self::DETAILS])) {
             $this->logger->log('Empty metrics items');
             return false;
         }
 
-        if (!key_exists(0, $responseArray['lighthouseResult']['audits']['metrics']['details']['items'])) {
+        if (!key_exists(0, $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::METRICS][self::DETAILS][self::ITEMS])) {
             $this->logger->log('Empty metrics items data');
             return false;
         }
 
         if (!key_exists(
-            'firstContentfulPaint',
-            $responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0]
+            self::FCP,
+            $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::METRICS][self::DETAILS][self::ITEMS][0]
         )) {
             $this->logger->log('Empty firstContentfulPaint');
             return false;
         }
         if (!key_exists(
-            'firstMeaningfulPaint',
-            $responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0]
+            self::FMP,
+            $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::METRICS][self::DETAILS][self::ITEMS][0]
         )) {
             $this->logger->log('Empty firstMeaningfulPaint');
             return false;
         }
-        if (!key_exists('speedIndex', $responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0])) {
+        if (!key_exists(self::SPEED_INDEX, $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::METRICS][self::DETAILS][self::ITEMS][0])) {
             $this->logger->log('Empty speedIndex');
             return false;
         }
 
         if (!key_exists(
-            'interactive',
-            $responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0]
+            self::INTERACTIVE,
+            $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::METRICS][self::DETAILS][self::ITEMS][0]
         )) {
             $this->logger->log('Empty interactive');
             return false;
         }
         if (!key_exists(
-            'firstCPUIdle',
-            $responseArray['lighthouseResult']['audits']['metrics']['details']['items'][0]
+            self::FCI,
+            $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::METRICS][self::DETAILS][self::ITEMS][0]
         )) {
             $this->logger->log('Empty firstCPUIdle');
             return false;
@@ -278,10 +283,10 @@ class CollectData
      *
      * @return string
      */
-    protected function prepareOverallCategory($responseArray)
+    protected function prepareOverallCategory(array $responseArray): string
     {
-        if (key_exists('overall_category', $responseArray['loadingExperience'])) {
-            return $responseArray['loadingExperience']['overall_category'];
+        if (key_exists(self::OVERALL_CATEGORY, $responseArray[self::LOADING_EXP])) {
+            return $responseArray[self::LOADING_EXP][self::OVERALL_CATEGORY];
         } else {
             return '';
         }
@@ -294,13 +299,12 @@ class CollectData
      *
      * @return int
      */
-    protected function prepareTtfb($responseArray)
+    protected function prepareTtfb(array $responseArray): int
     {
-        $string = $responseArray['lighthouseResult']['audits']['server-response-time']['displayValue'];
+        $string = $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::SRT][self::DISPLAY_VALUE];
         $string = str_replace(',', '', $string);
         $string = str_replace('.', '', $string);
-        $value = (int)filter_var($string, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-        return $value;
+        return (int)filter_var($string, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
     }
 
     /**
@@ -310,27 +314,27 @@ class CollectData
      *
      * @return array
      */
-    protected function prepareRenderBlockingResources($responseArray)
+    protected function prepareRenderBlockingResources(array $responseArray): array
     {
         $value = [];
-        if (!key_exists('render-blocking-resources', $responseArray['lighthouseResult']['audits'])) {
+        if (!key_exists(self::RENDER_BLOCK_RESOURCES, $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS])) {
             return $value;
         }
-        if (!key_exists('details', $responseArray['lighthouseResult']['audits']['render-blocking-resources'])) {
+        if (!key_exists(self::DETAILS, $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::RENDER_BLOCK_RESOURCES])) {
             return $value;
         }
         if (!key_exists(
-            'items',
-            $responseArray['lighthouseResult']['audits']['render-blocking-resources']['details']
+            self::ITEMS,
+            $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::RENDER_BLOCK_RESOURCES][self::DETAILS]
         )) {
             return $value;
         }
 
-        if (empty($responseArray['lighthouseResult']['audits']['render-blocking-resources']['details']['items'])) {
+        if (empty($responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::RENDER_BLOCK_RESOURCES][self::DETAILS][self::ITEMS])) {
             return $value;
         }
 
-        foreach ($responseArray['lighthouseResult']['audits']['render-blocking-resources']['details']['items'] as $item) {
+        foreach ($responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::RENDER_BLOCK_RESOURCES][self::DETAILS][self::ITEMS] as $item) {
             if (!empty($item)) {
                 $value[] = $item;
             }
@@ -346,39 +350,39 @@ class CollectData
      *
      * @return array
      */
-    protected function prepareNetworkRequests($responseArray)
+    protected function prepareNetworkRequests(array $responseArray): array
     {
         $value = [];
-        if (!key_exists('network-requests', $responseArray['lighthouseResult']['audits'])) {
+        if (!key_exists(self::NETWORK_REQUESTS, $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS])) {
             return $value;
         }
-        if (!key_exists('details', $responseArray['lighthouseResult']['audits']['network-requests'])) {
+        if (!key_exists(self::DETAILS, $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::NETWORK_REQUESTS])) {
             return $value;
         }
         if (!key_exists(
-            'items',
-            $responseArray['lighthouseResult']['audits']['network-requests']['details']
+            self::ITEMS,
+            $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::NETWORK_REQUESTS][self::DETAILS]
         )) {
             return $value;
         }
 
-        if (empty($responseArray['lighthouseResult']['audits']['network-requests']['details']['items'])) {
+        if (empty($responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::NETWORK_REQUESTS][self::DETAILS][self::ITEMS])) {
             return $value;
         }
 
-        foreach ($responseArray['lighthouseResult']['audits']['network-requests']['details']['items'] as $item) {
+        foreach ($responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::NETWORK_REQUESTS][self::DETAILS][self::ITEMS] as $item) {
             if (!empty($item)) {
                 $value[] = [
-                    'transferSize' => $item['transferSize'],
-                    'statusCode' => $item['statusCode'],
-                    'url' => $item['url'],
-                    'resourceType' => key_exists('resourceType', $item) ? $item['resourceType'] : '',
-                    'mimeType' => key_exists('mimeType', $item) ? $item['mimeType'] : '',
-                    'resourceSize' => key_exists('resourceSize', $item) ? $item['resourceSize'] : '',
-                    'time' => key_exists('endTime', $item) && key_exists(
-                        'startTime',
+                    self::TRANSFER_SIZE => $item[self::TRANSFER_SIZE],
+                    self::STATUS_CODE => $item[self::STATUS_CODE],
+                    self::URL => $item[self::URL],
+                    self::RESOURCE_TYPE => key_exists(self::RESOURCE_TYPE, $item) ? $item[self::RESOURCE_TYPE] : '',
+                    self::MIME_TYPE => key_exists(self::MIME_TYPE, $item) ? $item[self::MIME_TYPE] : '',
+                    self::RESOURCE_SIZE => key_exists(self::RESOURCE_SIZE, $item) ? $item[self::RESOURCE_SIZE] : '',
+                    self::TIME => key_exists(self::END_TIME, $item) && key_exists(
+                        self::START_TIME,
                         $item
-                    ) ? (float)$item['endTime'] - (float)$item['startTime'] : 0,
+                    ) ? (float)$item[self::END_TIME] - (float)$item[self::START_TIME] : 0,
                 ];
             }
         }
@@ -395,12 +399,12 @@ class CollectData
      *
      * @return int
      */
-    private static function sortByTime($a, $b)
+    private static function sortByTime(array $a, array $b): int
     {
-        if ($a['time'] == $b['time']) {
+        if ($a[self::TIME] == $b[self::TIME]) {
             return 0;
         }
-        return ($a['time'] < $b['time']) ? 1 : -1;
+        return ($a[self::TIME] < $b[self::TIME]) ? 1 : -1;
     }
 
     /**

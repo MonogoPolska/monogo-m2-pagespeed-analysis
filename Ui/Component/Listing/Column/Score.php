@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Monogo\PagespeedAnalysis\Ui\Component\Listing\Column;
 
 /**
@@ -14,11 +16,11 @@ class Score
     /**
      * Get Score color
      *
-     * @param string $value
+     * @param float $value
      *
      * @return string
      */
-    public function getScoreColor($value)
+    public function getScoreColor(float $value) : string
     {
         if ($value < 49) {
             return 'red';

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Monogo\PagespeedAnalysis\Model\ResourceModel\Pagespeed;
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
@@ -27,8 +29,8 @@ class Collection extends AbstractCollection
     protected function _construct()
     {
         $this->_init(
-            'Monogo\PagespeedAnalysis\Model\Pagespeed',
-            'Monogo\PagespeedAnalysis\Model\ResourceModel\Pagespeed'
+            \Monogo\PagespeedAnalysis\Model\Pagespeed::class,
+            \Monogo\PagespeedAnalysis\Model\ResourceModel\Pagespeed::class
         );
     }
 }

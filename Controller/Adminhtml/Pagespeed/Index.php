@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Monogo\PagespeedAnalysis\Controller\Adminhtml\Pagespeed;
 
 use Magento\Backend\App\Action;

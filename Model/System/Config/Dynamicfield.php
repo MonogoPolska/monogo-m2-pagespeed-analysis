@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Monogo\PagespeedAnalysis\Model\System\Config;
 
 use Magento\Config\Model\Config\Backend\Serialized\ArraySerialized;

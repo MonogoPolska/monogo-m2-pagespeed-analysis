@@ -14,7 +14,7 @@
 ?>
 
 <?php
-$graphData = $this->getData('graph');
+$graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::GRAPH);
 ?>
 
 <?php foreach ($graphData as $key => $item): ?>
@@ -37,41 +37,41 @@ $graphData = $this->getData('graph');
                     <div class="message">
 
                         <?php if (!empty($lastRecord->getComment())): ?>
-                            <?= __('Comment') ?>: <b><?= $lastRecord->getComment() ?></b><br/>
+                            <?= __('Comment') ?>: <strong><?= $lastRecord->getComment() ?></strong><br/>
                         <?php endif ?>
 
-                        <b><?= __('Performance') ?></b>:
+                        <strong><?= __('Performance') ?></strong>:
                         <span style="font-weight:bold ;color:  <?= $block->getScoreColor($lastRecord->getPerformanceScore()) ?> ">
                             <?= $lastRecord->getPerformanceScore() * 100 ?>%
                         </span>
                         <br/>
-                        <b><?= __('SEO') ?></b>: <span
+                        <strong><?= __('SEO') ?></strong>: <span
                                 style="font-weight:bold ;color:  <?= $block->getScoreColor($lastRecord->getSeoScore()) ?> ">
                             <?= $lastRecord->getSeoScore() * 100 ?>%
                         </span>
                         <br/>
-                        <b><?= __('PWA') ?></b>:
+                        <strong><?= __('PWA') ?></strong>:
                         <span style="font-weight:bold ;color:  <?= $block->getScoreColor($lastRecord->getPwaScore()) ?> ">
                             <?= $lastRecord->getPwaScore() * 100 ?>%
                         </span>
                         <br/>
-                        <b><?= __('Best Practices') ?></b>:
+                        <strong><?= __('Best Practices') ?></strong>:
                         <span style="font-weight:bold ;color:  <?= $block->getScoreColor($lastRecord->getBestPracticesScore()) ?> ">
                             <?= $lastRecord->getBestPracticesScore() * 100 ?>%
                         </span>
                         <br/>
-                        <b> <?= __('Accessibility') ?></b>:
+                        <strong> <?= __('Accessibility') ?></strong>:
                         <span style="font-weight:bold ;color:  <?= $block->getScoreColor($lastRecord->getAccessibilityScore()) ?> ">
                             <?= $lastRecord->getAccessibilityScore() * 100 ?>%
                         </span>
                         <br/>
-                        <b><?= __('TTFB') ?></b>: <?= $lastRecord->getTtfb() ?>ms<br/>
+                        <strong><?= __('TTFB') ?></strong>: <?= $lastRecord->getTtfb() ?>ms<br/>
                         <br/>
 
 
                         <?php $renderBlockingResources = json_decode($lastRecord->getRenderBlockingResources(), true) ?>
                         <?php if (!empty($renderBlockingResources)): ?>
-                            <b><?= __('Render Blocking Resources') ?> (<?= count($renderBlockingResources) ?>):</b><br/>
+                            <strong><?= __('Render Blocking Resources') ?> (<?= count($renderBlockingResources) ?>):</strong><br/>
                             <?php foreach ($renderBlockingResources as $resource): ?>
                                 <?= __('URL') ?> : <?= $resource['url'] ?><br/>
                                 <?= __('Time') ?> : <?= $resource['wastedMs'] ?>ms<br/>
@@ -83,7 +83,7 @@ $graphData = $this->getData('graph');
                         <?php $networkRequests = json_decode($lastRecord->getNetworkRequests(), true) ?>
                         <?php if (!empty($networkRequests)): ?>
 
-                            <b><?= __('Network Requests') ?> (<?= count($networkRequests) ?>):</b><br/>
+                            <strong><?= __('Network Requests') ?> (<?= count($networkRequests) ?>):</strong><br/>
                             <?php foreach ($networkRequests as $requests): ?>
                                 <?= __('URL') ?> : <?= $requests['url'] ?><br/>
                                 <?= __('Time') ?> : <?= floor($requests['time']) ?>ms<br/>

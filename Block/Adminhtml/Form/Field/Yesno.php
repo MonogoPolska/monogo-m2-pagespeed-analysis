@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Monogo\PagespeedAnalysis\Block\Adminhtml\Form\Field;
 
-use Magento\Framework\View\Element\Context;
 use Magento\Framework\View\Element\Html\Select;
+use Magento\Tests\NamingConvention\true\string;
 
 /**
  * Yesno Block
@@ -22,24 +24,11 @@ class Yesno extends Select
     private $selectOptions;
 
     /**
-     * Type constructor.
-     *
-     * @param \Magento\Framework\View\Element\Context $context Context
-     * @param array                                   $data    Data
-     */
-    public function __construct(
-        Context $context,
-        array $data = []
-    ) {
-        parent::__construct($context, $data);
-    }
-
-    /**
      * Get option array
      *
      * @return array
      */
-    protected function getSelectOptions()
+    protected function getSelectOptions() :array
     {
         if ($this->selectOptions === null) {
             $this->selectOptions = [
@@ -51,23 +40,11 @@ class Yesno extends Select
     }
 
     /**
-     * Set input name
-     *
-     * @param string $value Value
-     *
-     * @return mixed
-     */
-    public function setInputName($value)
-    {
-        return $this->setName($value);
-    }
-
-    /**
      * Render block HTML
      *
      * @return string
      */
-    public function _toHtml()
+    public function _toHtml() :string
     {
         if (!$this->getOptions()) {
             foreach ($this->getSelectOptions() as $rewriteType => $rewriteLabel) {

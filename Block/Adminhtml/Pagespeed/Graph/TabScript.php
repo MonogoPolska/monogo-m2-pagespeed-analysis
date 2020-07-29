@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Monogo\PagespeedAnalysis\Block\Adminhtml\Pagespeed\Graph;
 
 use Monogo\PagespeedAnalysis\Block\Adminhtml\Pagespeed\Graph;

@@ -8,6 +8,7 @@
  */
 ?>
 <?php
+use Monogo\PagespeedAnalysis\Api\Data\ConfigInterface;
 /**
  * @var $block \Monogo\PagespeedAnalysis\Block\Adminhtml\Pagespeed\Graph
  */
@@ -20,16 +21,16 @@ $graphData = $block->getChartData();
 <?php if (!$graphData): ?>
     <?= __('Empty chart data. Please configure module and run script.') ?>
 <?php else: ?>
-    <?php $tabs = $block->getChildBlock('pagespeed_tabs')->setData('graph', $graphData); ?>
+    <?php $tabs = $block->getChildBlock('pagespeed_tabs')->setData(ConfigInterface::GRAPH, $graphData); ?>
     <?= $tabs->toHtml(); ?>
 
-    <?php $tabContent = $block->getChildBlock('pagespeed_tab_content')->setData('graph', $graphData); ?>
+    <?php $tabContent = $block->getChildBlock('pagespeed_tab_content')->setData(ConfigInterface::GRAPH, $graphData); ?>
     <?= $tabContent->toHtml(); ?>
 
-    <?php $chartScript = $block->getChildBlock('pagespeed_chart_script')->setData('graph', $graphData); ?>
+    <?php $chartScript = $block->getChildBlock('pagespeed_chart_script')->setData(ConfigInterface::GRAPH, $graphData); ?>
     <?= $chartScript->toHtml(); ?>
 
-    <?php $tabScript = $block->getChildBlock('pagespeed_tab_script')->setData('graph', $graphData); ?>
+    <?php $tabScript = $block->getChildBlock('pagespeed_tab_script')->setData(ConfigInterface::GRAPH, $graphData); ?>
     <?= $tabScript->toHtml(); ?>
 <?php endif; ?>
 

@@ -2,14 +2,14 @@
     "name": "monogo/pagespeed-analysis",
     "description": "Magento 2 module for Google PageSpeed Analysis",
     "require": {
-        "php": "~7.2.0|~7.3.0",
+        "php": "~7.3.0||~7.4.0",
 
         "magento/magento-composer-installer": "*",
         "magento/framework": ">102.0.0",
         "symfony/console": "*"
     },
     "type": "magento2-module",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "license": "MIT",
     "keywords": ["Magento 2", "pagespeed", "insights"],
     "authors": [

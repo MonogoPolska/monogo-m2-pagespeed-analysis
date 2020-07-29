@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Monogo\PagespeedAnalysis\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use Magento\Framework\Model\ResourceModel\Db\Context;
 
 /**
  * Class Pagespeed ResourceModel
@@ -14,11 +15,6 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
  */
 class Pagespeed extends AbstractDb
 {
-    public function __construct(Context $context)
-    {
-        parent::__construct($context);
-    }
-
     protected function _construct()
     {
         $this->_init('monogo_pagespeed', 'entity_id');
