@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Monogo\PagespeedAnalysis\Block\Adminhtml\Form\Field;
 
 use Magento\Framework\View\Element\Html\Select;
-use Magento\Tests\NamingConvention\true\string;
 
 /**
  * Yesno Block
