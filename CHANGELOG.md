@@ -1,5 +1,9 @@
 # CHANGELOG
 
+<a name="1.2.2"></a>
+## 1.2.2 - 2020-08-24
+- Fix for invalid addslashes() param type
+
 <a name="1.2.1"></a>
 <a name="1.2.0"></a>
 ## 1.2.0, 1.2.1 - 2020-07-29

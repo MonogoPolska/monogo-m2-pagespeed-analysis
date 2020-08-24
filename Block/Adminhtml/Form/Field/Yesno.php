@@ -47,7 +47,7 @@ class Yesno extends Select
     {
         if (!$this->getOptions()) {
             foreach ($this->getSelectOptions() as $rewriteType => $rewriteLabel) {
-                $this->addOption($rewriteType, addslashes($rewriteLabel));
+                $this->addOption($rewriteType, addslashes($rewriteLabel->getText()));
             }
         }
         return parent::_toHtml();
