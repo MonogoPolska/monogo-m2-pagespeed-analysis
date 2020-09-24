@@ -1,5 +1,9 @@
 # CHANGELOG
 
+<a name="1.2.3"></a>
+## 1.2.3 - 2020-08-24
+- Fix for Magento 2.4 Dynamic Config
+
 <a name="1.2.2"></a>
 ## 1.2.2 - 2020-08-24
 - Fix for invalid addslashes() param type

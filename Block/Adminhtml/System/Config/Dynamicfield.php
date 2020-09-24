@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Monogo\PagespeedAnalysis\Block\Adminhtml\System\Config;
 
 use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
+use Magento\Framework\DataObject;
+use Magento\Framework\View\Element\Html\Select;
 
 /**
  * Dynamicfield Block
@@ -16,21 +18,21 @@ use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
 class Dynamicfield extends AbstractFieldArray
 {
     /**
-     * @var \Magento\Framework\View\Element\Html\Select
+     * @var Select
      */
     private $yesnoRenderer;
 
     /**
      * Get Yes No renderer
      *
-     * @return \Magento\Framework\View\Element\Html\Select
+     * @return Select
      */
-    protected function getYesNoRenderer(): \Magento\Framework\View\Element\Html\Select
+    protected function getYesNoRenderer(): Select
     {
         if (!$this->yesnoRenderer) {
             try {
                 $this->yesnoRenderer = $this->getLayout()->createBlock(
-                    'Monogo\PagespeedAnalysis\Block\Adminhtml\Form\Field\Yesno',
+                    \Monogo\PagespeedAnalysis\Block\Adminhtml\Form\Field\Yesno::class,
                     '',
                     ['data' => ['is_render_to_js_template' => true]]
                 );
@@ -69,7 +71,7 @@ class Dynamicfield extends AbstractFieldArray
     /**
      * {@inheritDoc}
      */
-    protected function _prepareArrayRow(\Magento\Framework\DataObject $row): void
+    protected function _prepareArrayRow(DataObject $row): void
     {
         $optionExtraAttr = [];
         $optionExtraAttr['option_' . $this->getYesNoRenderer()->calcOptionHash($row->getData('col_2'))] =

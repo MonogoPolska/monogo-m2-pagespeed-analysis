@@ -39,6 +39,28 @@ class Yesno extends Select
     }
 
     /**
+     * Set "name" for <select> element
+     *
+     * @param  string $value
+     * @return $this
+     */
+    public function setInputName($value)
+    {
+        return $this->setName($value);
+    }
+
+    /**
+     * Set "id" for <select> element
+     *
+     * @param $value
+     * @return $this
+     */
+    public function setInputId($value)
+    {
+        return $this->setId($value);
+    }
+
+    /**
      * Render block HTML
      *
      * @return string
