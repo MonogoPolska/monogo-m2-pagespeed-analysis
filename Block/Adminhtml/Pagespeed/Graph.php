@@ -394,11 +394,11 @@ class Graph extends Widget
     /**
      * Get Score color
      *
-     * @param string $value
+     * @param string|null $value
      *
      * @return string
      */
-    public function getScoreColor(string $value): string
+    public function getScoreColor(?string $value): string
     {
         return $this->score->getScoreColor($value * 100);
     }

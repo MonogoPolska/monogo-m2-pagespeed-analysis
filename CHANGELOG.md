@@ -1,6 +1,10 @@
 # CHANGELOG
 
 <a name="1.2.3"></a>
+## 1.2.4 - 2020-11-02
+- Fix for empty score returned from API
+
+<a name="1.2.3"></a>
 ## 1.2.3 - 2020-08-24
 - Fix for Magento 2.4 Dynamic Config
 

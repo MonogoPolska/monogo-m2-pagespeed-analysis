@@ -57,8 +57,8 @@ class Api
             }
         } catch (\Exception $e) {
             $this->logger->log($e->getMessage());
-            return null;
         }
+        return null;
     }
 
     /**
