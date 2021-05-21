@@ -51,6 +51,15 @@ class Graph extends Widget
     protected $maxTimeValue = [];
 
     /**
+     * @var int[]
+     */
+    protected $categoryMap = [
+        'SLOW' => 10,
+        'AVERAGE' => 50,
+        'FAST' => 90,
+    ];
+
+    /**
      * @var string
      */
     protected $_template = 'Monogo_PagespeedAnalysis::pagespeed/graph.phtml';
@@ -143,6 +152,47 @@ class Graph extends Widget
                 $data[$item->getMode()]['performance'][] = $item->getPerformanceScore() * 100;
                 $data[$item->getMode()]['accessibility'][] = $item->getAccessibilityScore() * 100;
                 $data[$item->getMode()]['best_practices'][] = $item->getBestPracticesScore() * 100;
+                $data[$item->getMode()]['cwv_le_cls_fast'][] = $item->getCwvLeClsFast() * 100;
+                $data[$item->getMode()]['cwv_le_cls_average'][] = $item->getCwvLeClsAverage() * 100;
+                $data[$item->getMode()]['cwv_le_cls_slow'][] = $item->getCwvLeClsSlow() * 100;
+                $data[$item->getMode()]['cwv_le_cls_category'] = $item->getCwvLeClsCategory();
+                $data[$item->getMode()]['cwv_le_cls_category_numbers'][] = $this->mapCategory($item->getCwvLeClsCategory());
+                $data[$item->getMode()]['cwv_le_fid_fast'][] = $item->getCwvLeFidFast() * 100;
+                $data[$item->getMode()]['cwv_le_fid_average'][] = $item->getCwvLeFidAverage() * 100;
+                $data[$item->getMode()]['cwv_le_fid_slow'][] = $item->getCwvLeFidSlow() * 100;
+                $data[$item->getMode()]['cwv_le_fid_category'] = $item->getCwvLeFidCategory();
+                $data[$item->getMode()]['cwv_le_fid_category_numbers'][] = $this->mapCategory($item->getCwvLeFidCategory());
+                $data[$item->getMode()]['cwv_le_fcp_fast'][] = $item->getCwvLeFcpFast() * 100;
+                $data[$item->getMode()]['cwv_le_fcp_average'][] = $item->getCwvLeFcpAverage() * 100;
+                $data[$item->getMode()]['cwv_le_fcp_slow'][] = $item->getCwvLeFcpSlow() * 100;
+                $data[$item->getMode()]['cwv_le_fcp_category'] = $item->getCwvLeFcpCategory();
+                $data[$item->getMode()]['cwv_le_fcp_category_numbers'][] = $this->mapCategory($item->getCwvLeFcpCategory());
+                $data[$item->getMode()]['cwv_le_lcp_fast'][] = $item->getCwvLeLcpFast() * 100;
+                $data[$item->getMode()]['cwv_le_lcp_average'][] = $item->getCwvLeLcpAverage() * 100;
+                $data[$item->getMode()]['cwv_le_lcp_slow'][] = $item->getCwvLeLcpSlow() * 100;
+                $data[$item->getMode()]['cwv_le_lcp_category'] = $item->getCwvLeLcpCategory();
+                $data[$item->getMode()]['cwv_le_lcp_category_numbers'][] = $this->mapCategory($item->getCwvLeLcpCategory());
+                $data[$item->getMode()]['cwv_ole_cls_fast'][] = $item->getCwvOleClsFast() * 100;
+                $data[$item->getMode()]['cwv_ole_cls_average'][] = $item->getCwvOleClsAverage() * 100;
+                $data[$item->getMode()]['cwv_ole_cls_slow'][] = $item->getCwvOleClsSlow() * 100;
+                $data[$item->getMode()]['cwv_ole_cls_category'] = $item->getCwvOleClsCategory();
+                $data[$item->getMode()]['cwv_ole_cls_category_numbers'][] = $this->mapCategory($item->getCwvOleClsCategory());
+                $data[$item->getMode()]['cwv_ole_fid_fast'][] = $item->getCwvOleFidFast() * 100;
+                $data[$item->getMode()]['cwv_ole_fid_average'][] = $item->getCwvOleFidAverage() * 100;
+                $data[$item->getMode()]['cwv_ole_fid_slow'][] = $item->getCwvOleFidSlow() * 100;
+                $data[$item->getMode()]['cwv_ole_fid_category'] = $item->getCwvOleFidCategory();
+                $data[$item->getMode()]['cwv_ole_fid_category_numbers'][] = $this->mapCategory($item->getCwvOleFidCategory());
+                $data[$item->getMode()]['cwv_ole_fcp_fast'][] = $item->getCwvOleFcpFast() * 100;
+                $data[$item->getMode()]['cwv_ole_fcp_average'][] = $item->getCwvOleFcpAverage() * 100;
+                $data[$item->getMode()]['cwv_ole_fcp_slow'][] = $item->getCwvOleFcpSlow() * 100;
+                $data[$item->getMode()]['cwv_ole_fcp_category'] = $item->getCwvOleFcpCategory();
+                $data[$item->getMode()]['cwv_ole_fcp_category_numbers'][] = $this->mapCategory($item->getCwvOleFcpCategory());
+                $data[$item->getMode()]['cwv_ole_lcp_fast'][] = $item->getCwvOleLcpFast() * 100;
+                $data[$item->getMode()]['cwv_ole_lcp_average'][] = $item->getCwvOleLcpAverage() * 100;
+                $data[$item->getMode()]['cwv_ole_lcp_slow'][] = $item->getCwvOleLcpSlow() * 100;
+                $data[$item->getMode()]['cwv_ole_lcp_category'] = $item->getCwvOleLcpCategory();
+                $data[$item->getMode()]['cwv_ole_lcp_category_numbers'][] = $this->mapCategory($item->getCwvOleLcpCategory());
+
             }
 
             $chartData[base64_encode($endpoint)] = $data;
@@ -259,26 +309,6 @@ class Graph extends Widget
     public function getUseAutoScale(): int
     {
         return $this->config->getUseAutoScale();
-    }
-
-    /**
-     * Get Use Zoom
-     *
-     * @return int
-     */
-    public function getUseZoom(): int
-    {
-        return $this->config->getUseZoom();
-    }
-
-    /**
-     * Get Zoom Sensitivity
-     *
-     * @return int
-     */
-    public function getZoomSensitivity(): int
-    {
-        return $this->config->getZoomSensitivity();
     }
 
     /**
@@ -441,5 +471,19 @@ class Graph extends Widget
     public function getPointHoverRadius(): int
     {
         return $this->config->getPointHoverRadius();
+    }
+
+    /**
+     * @param $category
+     *
+     * @return int
+     */
+    public function mapCategory($category): int
+    {
+        if (key_exists($category, $this->categoryMap)) {
+            return $this->categoryMap[$category];
+        } else {
+            return 0;
+        }
     }
 }

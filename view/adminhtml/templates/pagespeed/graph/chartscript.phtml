@@ -21,28 +21,614 @@ $graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::
 
     require.config({
         paths: {
-            chartjs: "//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min",
-            hammerjs: "//cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min",
-            chartjszoom: "//cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.2/chartjs-plugin-zoom.min"
-        },
-        map: {
-            hammerjs: {
-                "chart.js": "chartjs"
-            },
-            chartjszoom: {
-                "chart.js": "chartjs"
-            }
+            chartjs: "//cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.1/chart.min",
         }
     });
 
-    require(['chartjs','hammerjs','chartjszoom'], function (Chart, Hammer, Zoom) {
+    require(['chartjs'], function (Chart) {
 
         <?php foreach ($graphData as $key => $item): ?>
         <?php if(!empty($item)): ?>
         <?php foreach ($item as $strategy => $data): ?>
 
+        function getGradient(ctx, chartArea) {
+            let width, height, gradient;
+            const chartWidth = chartArea.right - chartArea.left;
+            const chartHeight = chartArea.bottom - chartArea.top;
+            if (gradient === null || width !== chartWidth || height !== chartHeight) {
+                // Create the gradient because this is either the first render
+                // or the size of the chart has changed
+                width = chartWidth;
+                height = chartHeight;
+                gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+                gradient.addColorStop(0, 'rgb(252,91,86)');
+                gradient.addColorStop(0.5, 'rgb(220,125,0)');
+                gradient.addColorStop(1, 'rgb(5,170,86)');
+            }
+
+            return gradient;
+        }
+
+        var CwvLeCls<?= str_replace('=', '', $key)?><?=  $strategy ?>
+            = new Chart(document.getElementById('cwv-le-cls-<?= $strategy ?>-<?= str_replace('=', '', $key) ?>'), {
+            type: "bar",
+            data: {
+                labels: <?= json_encode($data['created_at']) ?>,
+                datasets: [
+                    {
+                        label: 'Fast',
+                        data: <?= json_encode($data['cwv_le_cls_fast']) ?>,
+                        backgroundColor: 'rgb(11,206,107)',
+                        order: 1
+                    },
+                    {
+                        label: 'Average',
+                        data: <?= json_encode($data['cwv_le_cls_average']) ?>,
+                        backgroundColor: 'rgba(255,164,0)',
+                        order: 1
+                    },
+                    {
+                        label: 'Slow',
+                        data: <?= json_encode($data['cwv_le_cls_slow']) ?>,
+                        backgroundColor: 'rgba(255,78,65)',
+                        order: 1
+                    },
+                    {
+                        label: 'Score',
+                        data: <?= json_encode($data['cwv_le_cls_category_numbers']) ?>,
+                        backgroundColor: 'rgb(24,66,234)',
+                        borderColor: function(context) {
+                            const chart = context.chart;
+                            const {ctx, chartArea} = chart;
+
+                            if (!chartArea) {
+                                return null;
+                            }
+                            return getGradient(ctx, chartArea);
+                        },
+                        type: 'line',
+                        order: 0
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Current Cumulative Layout Shift CLS (Visual Stability) <?= $strategy ?>'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                if (tooltipItem['dataset']['label'] == 'Score') {
+                                    return tooltipItem['dataset']['label'] + ': ' +' <?= ucfirst(strtolower($data['cwv_le_cls_category'])) ?>';
+                                } else {
+                                    return tooltipItem['dataset']['label'] + ': ' + Math.round(tooltipItem['raw'] * 100) / 100 + '%';
+                                }
+                            }
+                        }
+                    }
+                },
+                responsive: true,
+                scales: {
+                    x: {
+                        stacked: true,
+                    },
+                    y: {
+                        stacked: true
+                    }
+                }
+            }
+        });
+
+
+        var CwvLeLcp<?= str_replace('=', '', $key)?><?=  $strategy ?>
+            = new Chart(document.getElementById('cwv-le-lcp-<?= $strategy ?>-<?= str_replace('=', '', $key) ?>'), {
+            type: "bar",
+            data: {
+                labels: <?= json_encode($data['created_at']) ?>,
+                datasets: [
+                    {
+                        label: 'Fast',
+                        data: <?= json_encode($data['cwv_le_lcp_fast']) ?>,
+                        backgroundColor: 'rgb(11,206,107)',
+                        order: 1
+                    },
+                    {
+                        label: 'Average',
+                        data: <?= json_encode($data['cwv_le_lcp_average']) ?>,
+                        backgroundColor: 'rgba(255,164,0)',
+                        order: 1
+                    },
+                    {
+                        label: 'Slow',
+                        data: <?= json_encode($data['cwv_le_lcp_slow']) ?>,
+                        backgroundColor: 'rgba(255,78,65)',
+                        order: 1
+                    },
+                    {
+                        label: 'Score',
+                        data: <?= json_encode($data['cwv_le_lcp_category_numbers']) ?>,
+                        backgroundColor: 'rgb(24,66,234)',
+                        borderColor: function(context) {
+                            const chart = context.chart;
+                            const {ctx, chartArea} = chart;
+
+                            if (!chartArea) {
+                                return null;
+                            }
+                            return getGradient(ctx, chartArea);
+                        },
+                        type: 'line',
+                        order: 0
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Current Largest Contentful Paint LCP (Loading) <?= $strategy ?>'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                if (tooltipItem['dataset']['label'] == 'Score') {
+                                    return tooltipItem['dataset']['label'] + ': ' +' <?= ucfirst(strtolower($data['cwv_le_lcp_category'])) ?>';
+                                } else {
+                                    return tooltipItem['dataset']['label'] + ': ' + Math.round(tooltipItem['raw'] * 100) / 100 + '%';
+                                }
+                            }
+                        }
+                    }
+                },
+                responsive: true,
+                scales: {
+                    x: {
+                        stacked: true,
+                    },
+                    y: {
+                        stacked: true
+                    }
+                }
+            }
+        });
+
+        var CwvLeFid<?= str_replace('=', '', $key)?><?=  $strategy ?>
+            = new Chart(document.getElementById('cwv-le-fid-<?= $strategy ?>-<?= str_replace('=', '', $key) ?>'), {
+            type: "bar",
+            data: {
+                labels: <?= json_encode($data['created_at']) ?>,
+                datasets: [
+                    {
+                        label: 'Fast',
+                        data: <?= json_encode($data['cwv_le_fid_fast']) ?>,
+                        backgroundColor: 'rgb(11,206,107)',
+                        order: 1
+                    },
+                    {
+                        label: 'Average',
+                        data: <?= json_encode($data['cwv_le_fid_average']) ?>,
+                        backgroundColor: 'rgba(255,164,0)',
+                        order: 1
+                    },
+                    {
+                        label: 'Slow',
+                        data: <?= json_encode($data['cwv_le_fid_slow']) ?>,
+                        backgroundColor: 'rgba(255,78,65)',
+                        order: 1
+                    },
+                    {
+                        label: 'Score',
+                        data: <?= json_encode($data['cwv_le_fid_category_numbers']) ?>,
+                        backgroundColor: 'rgb(24,66,234)',
+                        borderColor: function(context) {
+                            const chart = context.chart;
+                            const {ctx, chartArea} = chart;
+
+                            if (!chartArea) {
+                                return null;
+                            }
+                            return getGradient(ctx, chartArea);
+                        },
+                        type: 'line',
+                        order: 0
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Current First Input Delay FID (Interactivity) <?= $strategy ?>'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                if (tooltipItem['dataset']['label'] == 'Score') {
+                                    return tooltipItem['dataset']['label'] + ': ' +' <?= ucfirst(strtolower($data['cwv_le_fid_category'])) ?>';
+                                } else {
+                                    return tooltipItem['dataset']['label'] + ': ' + Math.round(tooltipItem['raw'] * 100) / 100 + '%';
+                                }
+                            }
+                        }
+                    }
+                },
+                responsive: true,
+                scales: {
+                    x: {
+                        stacked: true,
+                    },
+                    y: {
+                        stacked: true
+                    }
+                }
+            }
+        });
+
+        var CwvLeFcp<?= str_replace('=', '', $key)?><?=  $strategy ?>
+            = new Chart(document.getElementById('cwv-le-fcp-<?= $strategy ?>-<?= str_replace('=', '', $key) ?>'), {
+            type: "bar",
+            data: {
+                labels: <?= json_encode($data['created_at']) ?>,
+                datasets: [
+                    {
+                        label: 'Fast',
+                        data: <?= json_encode($data['cwv_le_fcp_fast']) ?>,
+                        backgroundColor: 'rgb(11,206,107)',
+                        order: 1
+                    },
+                    {
+                        label: 'Average',
+                        data: <?= json_encode($data['cwv_le_fcp_average']) ?>,
+                        backgroundColor: 'rgba(255,164,0)',
+                        order: 1
+                    },
+                    {
+                        label: 'Slow',
+                        data: <?= json_encode($data['cwv_le_fcp_slow']) ?>,
+                        backgroundColor: 'rgba(255,78,65)',
+                        order: 1
+                    },
+                    {
+                        label: 'Score',
+                        data: <?= json_encode($data['cwv_le_fcp_category_numbers']) ?>,
+                        backgroundColor: 'rgb(24,66,234)',
+                        borderColor: function(context) {
+                            const chart = context.chart;
+                            const {ctx, chartArea} = chart;
+
+                            if (!chartArea) {
+                                return null;
+                            }
+                            return getGradient(ctx, chartArea);
+                        },
+                        type: 'line',
+                        order: 0
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Current First Contentful Paint FCP (Optional) <?= $strategy ?>'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                if (tooltipItem['dataset']['label'] == 'Score') {
+                                    return tooltipItem['dataset']['label'] + ': ' +' <?= ucfirst(strtolower($data['cwv_le_fcp_category'])) ?>';
+                                } else {
+                                    return tooltipItem['dataset']['label'] + ': ' + Math.round(tooltipItem['raw'] * 100) / 100 + '%';
+                                }
+                            }
+                        }
+                    }
+                },
+                responsive: true,
+                scales: {
+                    x: {
+                        stacked: true,
+                    },
+                    y: {
+                        stacked: true
+                    }
+                }
+            }
+        });
+
+        var CwvOleCls<?= str_replace('=', '', $key)?><?=  $strategy ?>
+            = new Chart(document.getElementById('cwv-ole-cls-<?= $strategy ?>-<?= str_replace('=', '', $key) ?>'), {
+            type: "bar",
+            data: {
+                labels: <?= json_encode($data['created_at']) ?>,
+                datasets: [
+                    {
+                        label: 'Fast',
+                        data: <?= json_encode($data['cwv_ole_cls_fast']) ?>,
+                        backgroundColor: 'rgb(11,206,107)',
+                        order: 1
+                    },
+                    {
+                        label: 'Average',
+                        data: <?= json_encode($data['cwv_ole_cls_average']) ?>,
+                        backgroundColor: 'rgba(255,164,0)',
+                        order: 1
+                    },
+                    {
+                        label: 'Slow',
+                        data: <?= json_encode($data['cwv_ole_cls_slow']) ?>,
+                        backgroundColor: 'rgba(255,78,65)',
+                        order: 1
+                    },
+                    {
+                        label: 'Score',
+                        data: <?= json_encode($data['cwv_ole_cls_category_numbers']) ?>,
+                        backgroundColor: 'rgb(24,66,234)',
+                        borderColor: function(context) {
+                            const chart = context.chart;
+                            const {ctx, chartArea} = chart;
+
+                            if (!chartArea) {
+                                return null;
+                            }
+                            return getGradient(ctx, chartArea);
+                        },
+                        type: 'line',
+                        order: 0
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Origin Cumulative Layout Shift CLS (Visual Stability) <?= $strategy ?>'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                if (tooltipItem['dataset']['label'] == 'Score') {
+                                    return tooltipItem['dataset']['label'] + ': ' +' <?= ucfirst(strtolower($data['cwv_ole_cls_category'])) ?>';
+                                } else {
+                                    return tooltipItem['dataset']['label'] + ': ' + Math.round(tooltipItem['raw'] * 100) / 100 + '%';
+                                }
+                            }
+                        }
+                    }
+                },
+                responsive: true,
+                scales: {
+                    x: {
+                        stacked: true,
+                    },
+                    y: {
+                        stacked: true
+                    }
+                }
+            }
+        });
+
+
+        var CwvOleLcp<?= str_replace('=', '', $key)?><?=  $strategy ?>
+            = new Chart(document.getElementById('cwv-ole-lcp-<?= $strategy ?>-<?= str_replace('=', '', $key) ?>'), {
+            type: "bar",
+            data: {
+                labels: <?= json_encode($data['created_at']) ?>,
+                datasets: [
+                    {
+                        label: 'Fast',
+                        data: <?= json_encode($data['cwv_ole_lcp_fast']) ?>,
+                        backgroundColor: 'rgb(11,206,107)',
+                        order: 1
+                    },
+                    {
+                        label: 'Average',
+                        data: <?= json_encode($data['cwv_ole_lcp_average']) ?>,
+                        backgroundColor: 'rgba(255,164,0)',
+                        order: 1
+                    },
+                    {
+                        label: 'Slow',
+                        data: <?= json_encode($data['cwv_ole_lcp_slow']) ?>,
+                        backgroundColor: 'rgba(255,78,65)',
+                        order: 1
+                    },
+                    {
+                        label: 'Score',
+                        data: <?= json_encode($data['cwv_ole_lcp_category_numbers']) ?>,
+                        backgroundColor: 'rgb(24,66,234)',
+                        borderColor: function(context) {
+                            const chart = context.chart;
+                            const {ctx, chartArea} = chart;
+
+                            if (!chartArea) {
+                                return null;
+                            }
+                            return getGradient(ctx, chartArea);
+                        },
+                        type: 'line',
+                        order: 0
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Origin Largest Contentful Paint LCP (Loading) <?= $strategy ?>'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                if (tooltipItem['dataset']['label'] == 'Score') {
+                                    return tooltipItem['dataset']['label'] + ': ' +' <?= ucfirst(strtolower($data['cwv_ole_lcp_category'])) ?>';
+                                } else {
+                                    return tooltipItem['dataset']['label'] + ': ' + Math.round(tooltipItem['raw'] * 100) / 100 + '%';
+                                }
+                            }
+                        }
+                    }
+                },
+                responsive: true,
+                scales: {
+                    x: {
+                        stacked: true,
+                    },
+                    y: {
+                        stacked: true
+                    }
+                }
+            }
+        });
+
+        var CwvOleFid<?= str_replace('=', '', $key)?><?=  $strategy ?>
+            = new Chart(document.getElementById('cwv-ole-fid-<?= $strategy ?>-<?= str_replace('=', '', $key) ?>'), {
+            type: "bar",
+            data: {
+                labels: <?= json_encode($data['created_at']) ?>,
+                datasets: [
+                    {
+                        label: 'Fast',
+                        data: <?= json_encode($data['cwv_ole_fid_fast']) ?>,
+                        backgroundColor: 'rgb(11,206,107)',
+                        order: 1
+                    },
+                    {
+                        label: 'Average',
+                        data: <?= json_encode($data['cwv_ole_fid_average']) ?>,
+                        backgroundColor: 'rgba(255,164,0)',
+                        order: 1
+                    },
+                    {
+                        label: 'Slow',
+                        data: <?= json_encode($data['cwv_ole_fid_slow']) ?>,
+                        backgroundColor: 'rgba(255,78,65)',
+                        order: 1
+                    },
+                    {
+                        label: 'Score',
+                        data: <?= json_encode($data['cwv_ole_fid_category_numbers']) ?>,
+                        backgroundColor: 'rgb(24,66,234)',
+                        borderColor: function(context) {
+                            const chart = context.chart;
+                            const {ctx, chartArea} = chart;
+
+                            if (!chartArea) {
+                                return null;
+                            }
+                            return getGradient(ctx, chartArea);
+                        },
+                        type: 'line',
+                        order: 0
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Origin First Input Delay FID (Interactivity) <?= $strategy ?>'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                if (tooltipItem['dataset']['label'] == 'Score') {
+                                    return tooltipItem['dataset']['label'] + ': ' +' <?= ucfirst(strtolower($data['cwv_ole_fid_category'])) ?>';
+                                } else {
+                                    return tooltipItem['dataset']['label'] + ': ' + Math.round(tooltipItem['raw'] * 100) / 100 + '%';
+                                }
+                            }
+                        }
+                    }
+                },
+                responsive: true,
+                scales: {
+                    x: {
+                        stacked: true,
+                    },
+                    y: {
+                        stacked: true
+                    }
+                }
+            }
+        });
+
+        var CwvOleFcp<?= str_replace('=', '', $key)?><?=  $strategy ?>
+            = new Chart(document.getElementById('cwv-ole-fcp-<?= $strategy ?>-<?= str_replace('=', '', $key) ?>'), {
+            type: "bar",
+            data: {
+                labels: <?= json_encode($data['created_at']) ?>,
+                datasets: [
+                    {
+                        label: 'Fast',
+                        data: <?= json_encode($data['cwv_ole_fcp_fast']) ?>,
+                        backgroundColor: 'rgb(11,206,107)',
+                        order: 1
+                    },
+                    {
+                        label: 'Average',
+                        data: <?= json_encode($data['cwv_ole_fcp_average']) ?>,
+                        backgroundColor: 'rgba(255,164,0)',
+                        order: 1
+                    },
+                    {
+                        label: 'Slow',
+                        data: <?= json_encode($data['cwv_ole_fcp_slow']) ?>,
+                        backgroundColor: 'rgba(255,78,65)',
+                        order: 1
+                    },
+                    {
+                        label: 'Score',
+                        data: <?= json_encode($data['cwv_ole_fcp_category_numbers']) ?>,
+                        backgroundColor: 'rgb(24,66,234)',
+                        borderColor: function(context) {
+                            const chart = context.chart;
+                            const {ctx, chartArea} = chart;
+
+                            if (!chartArea) {
+                                return null;
+                            }
+                            return getGradient(ctx, chartArea);
+                        },
+                        type: 'line',
+                        order: 0
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Origin First Contentful Paint FCP (Optional) <?= $strategy ?>'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                if (tooltipItem['dataset']['label'] == 'Score') {
+                                    return tooltipItem['dataset']['label'] + ': ' +' <?= ucfirst(strtolower($data['cwv_ole_fcp_category'])) ?>';
+                                } else {
+                                    return tooltipItem['dataset']['label'] + ': ' + Math.round(tooltipItem['raw'] * 100) / 100 + '%';
+                                }
+                            }
+                        }
+                    }
+                },
+                responsive: true,
+                scales: {
+                    x: {
+                        stacked: true,
+                    },
+                    y: {
+                        stacked: true
+                    }
+                }
+            }
+        });
+
         var chartMain<?= str_replace('=', '', $key)?><?=  $strategy ?>
-            = new  Chart(document.getElementById('main-<?=$strategy?>-<?=  str_replace('=', '', $key) ?>'), {
+            = new Chart(document.getElementById('main-<?=$strategy?>-<?=  str_replace('=', '', $key) ?>'), {
             type: "line",
             data: {
                 labels: <?= json_encode($data['created_at']) ?>,
@@ -54,7 +640,7 @@ $graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::
                         borderColor: "<?= $block->getPerformanceColor() ?>",
                         lineTension: 0.1,
                         pointRadius: <?= $block->getPointRadius() ?>,
-                        pointHoverRadius:<?= $block->getPointHoverRadius() ?>,
+                        pointHoverRadius: <?= $block->getPointHoverRadius() ?>,
 
                     },
                     {
@@ -64,7 +650,7 @@ $graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::
                         borderColor: "<?= $block->getSeoColor() ?>",
                         lineTension: 0.1,
                         pointRadius: <?= $block->getPointRadius() ?>,
-                        pointHoverRadius:<?= $block->getPointHoverRadius() ?>,
+                        pointHoverRadius: <?= $block->getPointHoverRadius() ?>,
                     },
                     {
                         label: "PWA",
@@ -73,7 +659,7 @@ $graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::
                         borderColor: "<?= $block->getPwaColor() ?>",
                         lineTension: 0.1,
                         pointRadius: <?= $block->getPointRadius() ?>,
-                        pointHoverRadius:<?= $block->getPointHoverRadius() ?>,
+                        pointHoverRadius: <?= $block->getPointHoverRadius() ?>,
                     },
 
                     {
@@ -83,7 +669,7 @@ $graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::
                         borderColor: "<?= $block->getBestPracticesColor() ?>",
                         lineTension: 0.1,
                         pointRadius: <?= $block->getPointRadius() ?>,
-                        pointHoverRadius:<?= $block->getPointHoverRadius() ?>,
+                        pointHoverRadius: <?= $block->getPointHoverRadius() ?>,
                     },
                     {
                         label: "Accessibility",
@@ -92,7 +678,7 @@ $graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::
                         borderColor: "<?= $block->getAccessibilityColor() ?>",
                         lineTension: 0.1,
                         pointRadius: <?= $block->getPointRadius() ?>,
-                        pointHoverRadius:<?= $block->getPointHoverRadius() ?>,
+                        pointHoverRadius: <?= $block->getPointHoverRadius() ?>,
                     },
 
                 ]
@@ -112,7 +698,7 @@ $graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::
                     intersect: false,
                     mode: 'index'
                 },
-                responsive:true,
+                responsive: true,
                 scales: {
                     yAxes: [{
                         ticks: {
@@ -128,27 +714,11 @@ $graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::
                     xAxes: [{
                         ticks: {
                             <?php if($this->getHideOxValues()): ?>
-                            display:false,
+                            display: false,
                             <?php endif; ?>
                         }
                     }]
 
-                },
-                plugins: {
-                    <?php if($this->getUseZoom()): ?>
-                    zoom: {
-                        pan: {
-                            enabled: true,
-                            mode: 'x' ,
-                            sensitivity: <?= $this->getZoomSensitivity() ?>
-                        },
-                        zoom: {
-                            enabled: true,
-                            mode: 'x',
-                            sensitivity: <?= $this->getZoomSensitivity() ?>
-                        }
-                    }
-                    <?php endif ?>
                 }
             }
         });
@@ -165,7 +735,7 @@ $graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::
                         borderColor: "<?= $block->getTtfbColor() ?>",
                         lineTension: 0.1,
                         pointRadius: <?= $block->getPointRadius() ?>,
-                        pointHoverRadius:<?= $block->getPointHoverRadius() ?>,
+                        pointHoverRadius: <?= $block->getPointHoverRadius() ?>,
                     },
                     {
                         label: "First Contentful Paint",
@@ -174,7 +744,7 @@ $graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::
                         borderColor: "<?= $block->getFirstContentfulPaintColor() ?>",
                         lineTension: 0.1,
                         pointRadius: <?= $block->getPointRadius() ?>,
-                        pointHoverRadius:<?= $block->getPointHoverRadius() ?>,
+                        pointHoverRadius: <?= $block->getPointHoverRadius() ?>,
                     },
                     {
                         label: "First Meaningful Paint",
@@ -183,7 +753,7 @@ $graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::
                         borderColor: "<?= $block->getFirstMeaningfulPaintColor() ?>",
                         lineTension: 0.1,
                         pointRadius: <?= $block->getPointRadius() ?>,
-                        pointHoverRadius:<?= $block->getPointHoverRadius() ?>,
+                        pointHoverRadius: <?= $block->getPointHoverRadius() ?>,
                     },
                     {
                         label: "Speed Index",
@@ -192,7 +762,7 @@ $graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::
                         borderColor: "<?= $block->getSpeedIndexColor() ?>",
                         lineTension: 0.1,
                         pointRadius: <?= $block->getPointRadius() ?>,
-                        pointHoverRadius:<?= $block->getPointHoverRadius() ?>,
+                        pointHoverRadius: <?= $block->getPointHoverRadius() ?>,
                     },
                     {
                         label: "Interactive",
@@ -201,7 +771,7 @@ $graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::
                         borderColor: "<?= $block->getInteractiveColor() ?>",
                         lineTension: 0.1,
                         pointRadius: <?= $block->getPointRadius() ?>,
-                        pointHoverRadius:<?= $block->getPointHoverRadius() ?>,
+                        pointHoverRadius: <?= $block->getPointHoverRadius() ?>,
                     },
                     {
                         label: "First CPU Idle",
@@ -210,7 +780,7 @@ $graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::
                         borderColor: "<?= $block->getFirstCpuIdleColor() ?>",
                         lineTension: 0.1,
                         pointRadius: <?= $block->getPointRadius() ?>,
-                        pointHoverRadius:<?= $block->getPointHoverRadius() ?>,
+                        pointHoverRadius: <?= $block->getPointHoverRadius() ?>,
                     }
                 ]
             },
@@ -244,7 +814,7 @@ $graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::
                     xAxes: [{
                         ticks: {
                             <?php if($this->getHideOxValues()): ?>
-                            display:false,
+                            display: false,
                             <?php endif; ?>
                         }
                     }]
@@ -254,7 +824,7 @@ $graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::
                     zoom: {
                         pan: {
                             enabled: true,
-                            mode: 'x' ,
+                            mode: 'x',
                             sensitivity: <?= $this->getZoomSensitivity() ?>
 
                         },

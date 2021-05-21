@@ -160,6 +160,8 @@ class CollectData implements ConfigInterface
         $objectToSave->setTtfb($this->prepareTtfb($responseArray));
         $objectToSave->setRenderBlockingResources(json_encode($this->prepareRenderBlockingResources($responseArray)));
         $objectToSave->setNetworkRequests(json_encode($this->prepareNetworkRequests($responseArray)));
+        $this->prepareCwv($objectToSave, $responseArray);
+        $this->prepareOriginCwv($objectToSave, $responseArray);
         $this->transaction->addObject($objectToSave);
     }
 
@@ -230,12 +232,14 @@ class CollectData implements ConfigInterface
             return false;
         }
 
-        if (!key_exists(self::ITEMS, $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::METRICS][self::DETAILS])) {
+        if (!key_exists(self::ITEMS,
+            $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::METRICS][self::DETAILS])) {
             $this->logger->log('Empty metrics items');
             return false;
         }
 
-        if (!key_exists(0, $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::METRICS][self::DETAILS][self::ITEMS])) {
+        if (!key_exists(0,
+            $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::METRICS][self::DETAILS][self::ITEMS])) {
             $this->logger->log('Empty metrics items data');
             return false;
         }
@@ -254,7 +258,8 @@ class CollectData implements ConfigInterface
             $this->logger->log('Empty firstMeaningfulPaint');
             return false;
         }
-        if (!key_exists(self::SPEED_INDEX, $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::METRICS][self::DETAILS][self::ITEMS][0])) {
+        if (!key_exists(self::SPEED_INDEX,
+            $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::METRICS][self::DETAILS][self::ITEMS][0])) {
             $this->logger->log('Empty speedIndex');
             return false;
         }
@@ -320,7 +325,8 @@ class CollectData implements ConfigInterface
         if (!key_exists(self::RENDER_BLOCK_RESOURCES, $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS])) {
             return $value;
         }
-        if (!key_exists(self::DETAILS, $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::RENDER_BLOCK_RESOURCES])) {
+        if (!key_exists(self::DETAILS,
+            $responseArray[self::LIGHTHOUSE_RESULT][self::AUDITS][self::RENDER_BLOCK_RESOURCES])) {
             return $value;
         }
         if (!key_exists(
@@ -425,6 +431,84 @@ class CollectData implements ConfigInterface
                 $this->transaction->save();
             } catch (\Exception $e) {
                 $this->logger->log($e->getMessage());
+            }
+        }
+    }
+
+    /**
+     * @param Pagespeed $objectToSave
+     * @param array     $responseArray
+     */
+    public function prepareCwv(\Monogo\PagespeedAnalysis\Model\Pagespeed $objectToSave, array $responseArray)
+    {
+        if (key_exists(self::LOADING_EXP, $responseArray)
+            && key_exists(self::METRICS, $responseArray[self::LOADING_EXP])
+        ) {
+            $objectToSave->setCwvLeAvailable(1);
+            $tmpArray = $responseArray[self::LOADING_EXP][self::METRICS];
+
+            if (key_exists(self::CUMULATIVE_LAYOUT_SHIFT_SCORE, $tmpArray)) {
+                $objectToSave->setCwvLeClsFast($tmpArray[self::CUMULATIVE_LAYOUT_SHIFT_SCORE][self::DISTRIBUTIONS][0][self::PROPORTION]);
+                $objectToSave->setCwvLeClsAverage($tmpArray[self::CUMULATIVE_LAYOUT_SHIFT_SCORE][self::DISTRIBUTIONS][1][self::PROPORTION]);
+                $objectToSave->setCwvLeClsSlow($tmpArray[self::CUMULATIVE_LAYOUT_SHIFT_SCORE][self::DISTRIBUTIONS][2][self::PROPORTION]);
+                $objectToSave->setCwvLeClsCategory($tmpArray[self::CUMULATIVE_LAYOUT_SHIFT_SCORE][self::CATEGORY]);
+            }
+            if (key_exists(self::FIRST_CONTENTFUL_PAINT_MS, $tmpArray)) {
+                $objectToSave->setCwvLeFcpFast($tmpArray[self::FIRST_CONTENTFUL_PAINT_MS][self::DISTRIBUTIONS][0][self::PROPORTION]);
+                $objectToSave->setCwvLeFcpAverage($tmpArray[self::FIRST_CONTENTFUL_PAINT_MS][self::DISTRIBUTIONS][1][self::PROPORTION]);
+                $objectToSave->setCwvLeFcpSlow($tmpArray[self::FIRST_CONTENTFUL_PAINT_MS][self::DISTRIBUTIONS][2][self::PROPORTION]);
+                $objectToSave->setCwvLeFcpCategory($tmpArray[self::FIRST_CONTENTFUL_PAINT_MS][self::CATEGORY]);
+            }
+            if (key_exists(self::FIRST_INPUT_DELAY_MS, $tmpArray)) {
+                $objectToSave->setCwvLeFidFast($tmpArray[self::FIRST_INPUT_DELAY_MS][self::DISTRIBUTIONS][0][self::PROPORTION]);
+                $objectToSave->setCwvLeFidAverage($tmpArray[self::FIRST_INPUT_DELAY_MS][self::DISTRIBUTIONS][1][self::PROPORTION]);
+                $objectToSave->setCwvLeFidSlow($tmpArray[self::FIRST_INPUT_DELAY_MS][self::DISTRIBUTIONS][2][self::PROPORTION]);
+                $objectToSave->setCwvLeFidCategory($tmpArray[self::FIRST_INPUT_DELAY_MS][self::CATEGORY]);
+            }
+            if (key_exists(self::LARGEST_CONTENTFUL_PAINT_MS, $tmpArray)) {
+                $objectToSave->setCwvLeLcpFast($tmpArray[self::LARGEST_CONTENTFUL_PAINT_MS][self::DISTRIBUTIONS][0][self::PROPORTION]);
+                $objectToSave->setCwvLeLcpAverage($tmpArray[self::LARGEST_CONTENTFUL_PAINT_MS][self::DISTRIBUTIONS][1][self::PROPORTION]);
+                $objectToSave->setCwvLeLcpSlow($tmpArray[self::LARGEST_CONTENTFUL_PAINT_MS][self::DISTRIBUTIONS][2][self::PROPORTION]);
+                $objectToSave->setCwvLeLcpCategory($tmpArray[self::LARGEST_CONTENTFUL_PAINT_MS][self::CATEGORY]);
+            }
+        }
+    }
+
+    /**
+     * @param Pagespeed $objectToSave
+     * @param array     $responseArray
+     */
+    public function prepareOriginCwv(\Monogo\PagespeedAnalysis\Model\Pagespeed $objectToSave, array $responseArray)
+    {
+        if (key_exists(self::ORIGIN_LOADING_EXP, $responseArray)
+            && key_exists(self::METRICS, $responseArray[self::ORIGIN_LOADING_EXP])
+        ) {
+            $objectToSave->setCwvOleAvailable(1);
+            $tmpArray = $responseArray[self::ORIGIN_LOADING_EXP][self::METRICS];
+
+            if (key_exists(self::CUMULATIVE_LAYOUT_SHIFT_SCORE, $tmpArray)) {
+                $objectToSave->setCwvOleClsFast($tmpArray[self::CUMULATIVE_LAYOUT_SHIFT_SCORE][self::DISTRIBUTIONS][0][self::PROPORTION]);
+                $objectToSave->setCwvOleClsAverage($tmpArray[self::CUMULATIVE_LAYOUT_SHIFT_SCORE][self::DISTRIBUTIONS][1][self::PROPORTION]);
+                $objectToSave->setCwvOleClsSlow($tmpArray[self::CUMULATIVE_LAYOUT_SHIFT_SCORE][self::DISTRIBUTIONS][2][self::PROPORTION]);
+                $objectToSave->setCwvOleClsCategory($tmpArray[self::CUMULATIVE_LAYOUT_SHIFT_SCORE][self::CATEGORY]);
+            }
+            if (key_exists(self::FIRST_CONTENTFUL_PAINT_MS, $tmpArray)) {
+                $objectToSave->setCwvOleFcpFast($tmpArray[self::FIRST_CONTENTFUL_PAINT_MS][self::DISTRIBUTIONS][0][self::PROPORTION]);
+                $objectToSave->setCwvOleFcpAverage($tmpArray[self::FIRST_CONTENTFUL_PAINT_MS][self::DISTRIBUTIONS][1][self::PROPORTION]);
+                $objectToSave->setCwvOleFcpSlow($tmpArray[self::FIRST_CONTENTFUL_PAINT_MS][self::DISTRIBUTIONS][2][self::PROPORTION]);
+                $objectToSave->setCwvOleFcpCategory($tmpArray[self::FIRST_CONTENTFUL_PAINT_MS][self::CATEGORY]);
+            }
+            if (key_exists(self::FIRST_INPUT_DELAY_MS, $tmpArray)) {
+                $objectToSave->setCwvOleFidFast($tmpArray[self::FIRST_INPUT_DELAY_MS][self::DISTRIBUTIONS][0][self::PROPORTION]);
+                $objectToSave->setCwvOleFidAverage($tmpArray[self::FIRST_INPUT_DELAY_MS][self::DISTRIBUTIONS][1][self::PROPORTION]);
+                $objectToSave->setCwvOleFidSlow($tmpArray[self::FIRST_INPUT_DELAY_MS][self::DISTRIBUTIONS][2][self::PROPORTION]);
+                $objectToSave->setCwvOleFidCategory($tmpArray[self::FIRST_INPUT_DELAY_MS][self::CATEGORY]);
+            }
+            if (key_exists(self::LARGEST_CONTENTFUL_PAINT_MS, $tmpArray)) {
+                $objectToSave->setCwvOleLcpFast($tmpArray[self::LARGEST_CONTENTFUL_PAINT_MS][self::DISTRIBUTIONS][0][self::PROPORTION]);
+                $objectToSave->setCwvOleLcpAverage($tmpArray[self::LARGEST_CONTENTFUL_PAINT_MS][self::DISTRIBUTIONS][1][self::PROPORTION]);
+                $objectToSave->setCwvOleLcpSlow($tmpArray[self::LARGEST_CONTENTFUL_PAINT_MS][self::DISTRIBUTIONS][2][self::PROPORTION]);
+                $objectToSave->setCwvOleLcpCategory($tmpArray[self::LARGEST_CONTENTFUL_PAINT_MS][self::CATEGORY]);
             }
         }
     }

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+<a name="1.3.0"></a>
+## 1.3.0 - 2021-05-21
+- Added Core Web Vitals Charts
+- Removed zoom in charts
+
 <a name="1.2.3"></a>
 ## 1.2.4 - 2020-11-02
 - Fix for empty score returned from API

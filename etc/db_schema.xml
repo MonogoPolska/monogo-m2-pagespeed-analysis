@@ -27,6 +27,50 @@
         <column xsi:type="float" name="speed_index" nullable="true" comment="Speed Index" />
         <column xsi:type="float" name="interactive" nullable="true" comment="Interactive" />
         <column xsi:type="float" name="first_cpu_idle" nullable="true" comment="First CPU Idle" />
+
+        <column xsi:type="int" name="cwv_le_available" nullable="true" comment="Core Web Vitals are available" />
+        <column xsi:type="int" name="cwv_ole_available" nullable="true" comment="Core Web Vitals Origin are available" />
+
+        <column xsi:type="float" name="cwv_le_fcp_fast" nullable="true" comment="CWV Loading Experience First Contentful Paint Fast" />
+        <column xsi:type="float" name="cwv_le_fcp_average" nullable="true" comment="CWV Loading Experience First Contentful Paint Average" />
+        <column xsi:type="float" name="cwv_le_fcp_slow" nullable="true" comment="CWV Loading Experience First Contentful Paint Slow" />
+        <column xsi:type="varchar" name="cwv_le_fcp_category" nullable="true" comment="CWV Loading Experience First Contentful Paint Category" />
+
+        <column xsi:type="float" name="cwv_le_fid_fast" nullable="true" comment="CWV Loading Experience First Input Delay Fast" />
+        <column xsi:type="float" name="cwv_le_fid_average" nullable="true" comment="CWV Loading Experience First Input Delay Average" />
+        <column xsi:type="float" name="cwv_le_fid_slow" nullable="true" comment="CWV Loading Experience First Input Delay Slow" />
+        <column xsi:type="varchar" name="cwv_le_fid_category" nullable="true" comment="CWV Loading Experience First Input Delay Category" />
+
+        <column xsi:type="float" name="cwv_le_lcp_fast" nullable="true" comment="CWV Loading Experience Largest Contentful Paint Fast" />
+        <column xsi:type="float" name="cwv_le_lcp_average" nullable="true" comment="CWV Loading Experience Largest Contentful Paint Average" />
+        <column xsi:type="float" name="cwv_le_lcp_slow" nullable="true" comment="CWV Loading Experience Largest Contentful Paint Slow" />
+        <column xsi:type="varchar" name="cwv_le_lcp_category" nullable="true" comment="CWV Loading Experience Largest Contentful Paint Category" />
+
+        <column xsi:type="float" name="cwv_le_cls_fast" nullable="true" comment="CWV Loading Experience Cumulative Layout Shift Fast" />
+        <column xsi:type="float" name="cwv_le_cls_average" nullable="true" comment="CWV Loading Experience Cumulative Layout Shift Average" />
+        <column xsi:type="float" name="cwv_le_cls_slow" nullable="true" comment="CWV Loading Experience Cumulative Layout Shift Slow" />
+        <column xsi:type="varchar" name="cwv_le_cls_category" nullable="true" comment="CWV Loading Experience Cumulative Layout Shift Category" />
+
+        <column xsi:type="float" name="cwv_ole_fcp_fast" nullable="true" comment="CWV Origin Loading Experience First Contentful Paint Fast" />
+        <column xsi:type="float" name="cwv_ole_fcp_average" nullable="true" comment="CWV Origin Loading Experience First Contentful Paint Average" />
+        <column xsi:type="float" name="cwv_ole_fcp_slow" nullable="true" comment="CWV Loading Experience First Contentful Paint Slow" />
+        <column xsi:type="varchar" name="cwv_ole_fcp_category" nullable="true" comment="CWV Loading Experience First Contentful Paint Category" />
+
+        <column xsi:type="float" name="cwv_ole_fid_fast" nullable="true" comment="CWV Origin Loading Experience First Input Delay Fast" />
+        <column xsi:type="float" name="cwv_ole_fid_average" nullable="true" comment="CWV Origin Loading Experience First Input Delay Average" />
+        <column xsi:type="float" name="cwv_ole_fid_slow" nullable="true" comment="CWV Origin Loading Experience First Input Delay Slow" />
+        <column xsi:type="varchar" name="cwv_ole_fid_category" nullable="true" comment="CWV Origin Loading Experience First Input Delay Category" />
+
+        <column xsi:type="float" name="cwv_ole_lcp_fast" nullable="true" comment="CWV Origin Loading Experience Largest Contentful Paint Fast" />
+        <column xsi:type="float" name="cwv_ole_lcp_average" nullable="true" comment="CWV Origin Loading Experience Largest Contentful Paint Average" />
+        <column xsi:type="float" name="cwv_ole_lcp_slow" nullable="true" comment="CWV Origin Loading Experience Largest Contentful Paint Slow" />
+        <column xsi:type="varchar" name="cwv_ole_lcp_category" nullable="true" comment="CWV Origin Loading Experience Largest Contentful Paint Category" />
+
+        <column xsi:type="float" name="cwv_ole_cls_fast" nullable="true" comment="CWV Origin Loading Experience Cumulative Layout Shift Fast" />
+        <column xsi:type="float" name="cwv_ole_cls_average" nullable="true" comment="CWV Origin Loading Experience Cumulative Layout Shift Average" />
+        <column xsi:type="float" name="cwv_ole_cls_slow" nullable="true" comment="CWV Origin Loading Experience Cumulative Layout Shift Slow" />
+        <column xsi:type="varchar" name="cwv_ole_cls_category" nullable="true" comment="CWV Origin Loading Experience Cumulative Layout Shift Category" />
+
         <column xsi:type="longtext" name="render_blocking_resources"  comment="Render blocking resources" />
         <column xsi:type="longtext" name="network_requests"  comment="Network requests" />
         <column xsi:type="text" name="comment"  comment="Comment" />

@@ -36,10 +36,6 @@ class Config extends AbstractHelper
 
     const CHART_AUTOSCALE = 'chart/autoscale';
 
-    const CHART_ZOOM = 'chart/zoom';
-
-    const CHART_ZOOM_SENSITIVITY = 'chart/zoom_sensitivity';
-
     const CHART_HISTORY = 'chart/history';
 
     const CHART_PERFORMANCE_COLOR = 'chart/performance';
@@ -193,26 +189,6 @@ class Config extends AbstractHelper
     public function getUseAutoScale(): int
     {
         return (int)$this->getConfig(self::CONFIG_PATH . self::CHART_AUTOSCALE);
-    }
-
-    /**
-     * Get Use Zoom
-     *
-     * @return int
-     */
-    public function getUseZoom(): int
-    {
-        return (int)$this->getConfig(self::CONFIG_PATH . self::CHART_ZOOM);
-    }
-
-    /**
-     * Get Zoom Sensitivity
-     *
-     * @return int
-     */
-    public function getZoomSensitivity(): int
-    {
-        return (int)$this->getConfig(self::CONFIG_PATH . self::CHART_ZOOM_SENSITIVITY);
     }
 
     /**

@@ -29,6 +29,8 @@ interface ConfigInterface
 
     const LOADING_EXP = 'loadingExperience';
 
+    const ORIGIN_LOADING_EXP = 'originLoadingExperience';
+
     const OVERALL_CATEGORY = 'overall_category';
 
     const EMULATED_FACTOR = 'emulatedFormFactor';
@@ -84,4 +86,18 @@ interface ConfigInterface
     const PWA = 'pwa';
 
     const GRAPH = 'graph';
+
+    const LARGEST_CONTENTFUL_PAINT_MS = 'LARGEST_CONTENTFUL_PAINT_MS';
+
+    const FIRST_INPUT_DELAY_MS = 'FIRST_INPUT_DELAY_MS';
+
+    const FIRST_CONTENTFUL_PAINT_MS = 'FIRST_CONTENTFUL_PAINT_MS';
+
+    const CUMULATIVE_LAYOUT_SHIFT_SCORE = 'CUMULATIVE_LAYOUT_SHIFT_SCORE';
+
+    const DISTRIBUTIONS = 'distributions';
+
+    const PROPORTION = 'proportion';
+
+    const CATEGORY = 'category';
 }
