@@ -1,5 +1,9 @@
 # CHANGELOG
 
+<a name="1.3.1"></a>
+## 1.3.1 - 2021-05-21
+- Fixed tooltips
+
 <a name="1.3.0"></a>
 ## 1.3.0 - 2021-05-21
 - Added Core Web Vitals Charts

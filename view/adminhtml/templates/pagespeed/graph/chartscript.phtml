@@ -693,7 +693,7 @@ $graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::
                     display: true,
                     text: '<?=  ucfirst($strategy) ?> PageSpeed score for <?= base64_decode($key) ?> (<?= __('last') . ' ' . $block->getChartHistory() . ' ' . __('days') ?>)'
                 },
-                tooltips: {
+                interaction: {
                     position: 'nearest',
                     intersect: false,
                     mode: 'index'
@@ -794,7 +794,7 @@ $graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::
                     display: true,
                     text: '<?=  ucfirst($strategy) ?> Timing for <?= base64_decode($key) ?> (<?= __('last') . ' ' . $block->getChartHistory() . ' ' . __('days') ?>)'
                 },
-                tooltips: {
+                interaction: {
                     position: 'nearest',
                     intersect: false,
                     mode: 'index'
@@ -819,23 +819,6 @@ $graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::
                         }
                     }]
                 },
-                plugins: {
-                    <?php if($this->getUseZoom()): ?>
-                    zoom: {
-                        pan: {
-                            enabled: true,
-                            mode: 'x',
-                            sensitivity: <?= $this->getZoomSensitivity() ?>
-
-                        },
-                        zoom: {
-                            enabled: true,
-                            mode: 'x',
-                            sensitivity: <?= $this->getZoomSensitivity() ?>
-                        }
-                    }
-                    <?php endif ?>
-                }
             }
         });
 
