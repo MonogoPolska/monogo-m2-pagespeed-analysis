@@ -1,5 +1,9 @@
 # CHANGELOG
 
+<a name="1.3.2"></a>
+## 1.3.2 - 2021-05-24
+- Fixed chart title and axis description
+
 <a name="1.3.1"></a>
 ## 1.3.1 - 2021-05-21
 - Fixed tooltips

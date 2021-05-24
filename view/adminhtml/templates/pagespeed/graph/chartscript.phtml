@@ -689,9 +689,11 @@ $graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::
                     duration: 0
                 },
                 <?php endif; ?>
-                title: {
-                    display: true,
-                    text: '<?=  ucfirst($strategy) ?> PageSpeed score for <?= base64_decode($key) ?> (<?= __('last') . ' ' . $block->getChartHistory() . ' ' . __('days') ?>)'
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '<?=  ucfirst($strategy) ?> PageSpeed score for <?= base64_decode($key) ?> (<?= __('last') . ' ' . $block->getChartHistory() . ' ' . __('days') ?>)'
+                    }
                 },
                 interaction: {
                     position: 'nearest',
@@ -700,7 +702,7 @@ $graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::
                 },
                 responsive: true,
                 scales: {
-                    yAxes: [{
+                    y: {
                         ticks: {
                             <?php if(!$this->getUseAutoscale()): ?>
                             beginAtZero: true,
@@ -710,14 +712,14 @@ $graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::
                                 return value + '%';
                             }
                         }
-                    }],
-                    xAxes: [{
+                    },
+                    x: {
                         ticks: {
                             <?php if($this->getHideOxValues()): ?>
                             display: false,
                             <?php endif; ?>
                         }
-                    }]
+                    }
 
                 }
             }
@@ -785,14 +787,16 @@ $graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::
                 ]
             },
             options: {
-                <?php if(!$this->getEnableAnimations()): ?>
+            <?php if(!$this->getEnableAnimations()): ?>
                 animation: {
                     duration: 0
                 },
                 <?php endif; ?>
-                title: {
-                    display: true,
-                    text: '<?=  ucfirst($strategy) ?> Timing for <?= base64_decode($key) ?> (<?= __('last') . ' ' . $block->getChartHistory() . ' ' . __('days') ?>)'
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '<?=  ucfirst($strategy) ?> Timing for <?= base64_decode($key) ?> (<?= __('last') . ' ' . $block->getChartHistory() . ' ' . __('days') ?>)'
+                    }
                 },
                 interaction: {
                     position: 'nearest',
@@ -800,7 +804,7 @@ $graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::
                     mode: 'index'
                 },
                 scales: {
-                    yAxes: [{
+                    y: {
                         ticks: {
                             <?php if(!$this->getUseAutoscale()): ?>
                             beginAtZero: true,
@@ -810,14 +814,14 @@ $graphData = $this->getData(\Monogo\PagespeedAnalysis\Api\Data\ConfigInterface::
                                 return value + 'ms';
                             }
                         }
-                    }],
-                    xAxes: [{
+                    },
+                    xAxes: {
                         ticks: {
                             <?php if($this->getHideOxValues()): ?>
                             display: false,
                             <?php endif; ?>
                         }
-                    }]
+                    }
                 },
             }
         });
